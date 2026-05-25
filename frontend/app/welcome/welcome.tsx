@@ -1,5 +1,6 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
+import { rolldown } from "vite/types/internal/rollupTypeCompat.js";
 
 export function Welcome() {
   return (
