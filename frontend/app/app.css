@@ -3,6 +3,43 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+ 
+ /* --color-nama-warna, utilitas untuk Background (bg-), Text (text-), dan Border (border-) secara otomatis  */
+    /* Rumpun Warna HIJAU */
+  --color-hijau-uin: #008001;
+  --color-hijau-botol: #0B4A14;
+  --color-hijau-zamrud: #00A859;
+  --color-hijau-lumut: #3A7D44;
+  --color-sage: #87A987;
+  --color-olive: #556B2F;
+  --color-forest-khaki: #4A5D4E;
+
+  /* Rumpun Warna KUNING & EMAS */
+  --color-kuning-emas: #FFD700;
+  --color-emas-gelap: #C69214;
+  --color-soft-ochre: #EAE15B;
+
+  /* Rumpun Warna AKSEN JINGGA & MERAH */
+  --color-terracotta: #C85A32;
+  --color-burnt-orange: #E07A5F;
+  --color-dusty-rose: #D4A373;
+
+  /* Rumpun Warna BIRU & TEAL */
+  --color-toska-tua: #0B5257;
+  --color-deep-teal: #005C53;
+
+  /* Rumpun Warna NETRAL TERANG */
+  --color-putih-bersih: #FFFFFF;
+  --color-mint-lembut: #EAF5EC;
+  --color-cream: #FFFEE0;
+  --color-warm-sand: #D2B48C;
+  --color-champagne: #F7E7CE;
+  --color-pale-eucalyptus: #B5C99A;
+
+  /* Rumpun Warna NETRAL GELAP */
+  --color-charcoal: #1A1A1A;
+  --color-dark-slate: #2F4F4F;
+  --color-abu-perak: #E5E5E5;
 }
 
 html,

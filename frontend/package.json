@@ -1,5 +1,5 @@
 {
-  "name": "click",
+  "name": "frontend",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
   "dependencies": {
     "@react-router/node": "7.15.1",
     "@react-router/serve": "7.15.1",
+    "@remixicon/react": "^4.9.0",
     "isbot": "^5.1.36",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
@@ -18,11 +19,11 @@
   },
   "devDependencies": {
     "@react-router/dev": "7.15.1",
-    "@tailwindcss/vite": "^4.2.2",
+    "@tailwindcss/vite": "^4.3.0",
     "@types/node": "^22",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.3.0",
     "typescript": "^5.9.3",
     "vite": "^8.0.3"
   }
