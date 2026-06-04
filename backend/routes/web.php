@@ -3,11 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/test', function () {
     return response()->json([
-        'message' => 'API Laravel jalan'
+        'status' => 'success',
+        'message' => 'EduConnect API is running smoothly',
+        'version' => '1.0'
     ]);
 });
