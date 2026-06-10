@@ -6,7 +6,7 @@ import { RiBookOpenLine } from "@remixicon/react";
 
 export default function Kelas() {
   return (
-    <div className="relative min-h-[calc(100vh-120px)] w-full overflow-hidden bg-putih-bersih">
+    <div className="relative h-full w-full bg-putih-bersih">
 
       <div
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-15"
@@ -17,7 +17,7 @@ export default function Kelas() {
 
       <div className="absolute inset-0 z-10 bg-gradient-to-br from-mint-lembut/40 via-putih-bersih/60 to-champagne/40" />
 
-      <div className="absolute bottom-[-150px] right-[-150px] z-10 h-[450px] w-[450px] rounded-full bg-kuning-emas/10 blur-3xl" />
+      <div className="absolute bottom-37.5 right-37.5 z-10 h-112.5 w-24 rounded-full bg-kuning-emas/10 blur-3xl" />
 
       {/* Pattern Grid Halus */}
       <div className="absolute inset-0 z-10 bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:60px_60px] opacity-[0.02]" />
@@ -29,7 +29,6 @@ export default function Kelas() {
           <RiBookOpenLine size={48} className="text-hijau-uin" />
         </div>
 
-        {/* Judul */}
         <h1 className="mt-8 text-5xl font-bold tracking-tight text-hijau-botol md:text-7xl">
           Kelas
         </h1>

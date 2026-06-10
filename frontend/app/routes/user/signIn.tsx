@@ -1,17 +1,13 @@
 import { Link } from "react-router";
 import type { Route } from "../+types/home";
 
-import { RiGoogleLine } from "@remixicon/react";
+import { RiGoogleLine, RiHand2 } from "@remixicon/react";
 export function meta({ }: Route.MetaArgs) {
   return [
     { title: "SignIn" },
     { name: "description", content: "Welcome to React Router!" },
   ];
 }
-
-
-
-
 export default function SignInPage() {
   return (
     <div className="min-h-screen bg-mint-lembut flex items-center justify-center px-4 py-10">
@@ -71,7 +67,7 @@ export default function SignInPage() {
           <div className="w-full max-w-md">
             <div className="mb-8">
               <div className="inline-flex items-center gap-2 rounded-full bg-mint-lembut px-4 py-2 text-sm font-medium text-hijau-botol border border-sage/30">
-                Selamat Datang 👋
+                Selamat Datang <RiHand2 size={18} />
               </div>
 
               <h2 className="mt-5 text-4xl font-black text-charcoal">
@@ -158,7 +154,7 @@ export default function SignInPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <button className="rounded-2xl border border-abu-perak bg-putih-bersih px-4 py-3 font-semibold text-dark-slate transition-all duration-300 hover:border-sage hover:bg-mint-lembut">
-                <RiGoogleLine/>
+                <RiGoogleLine />
               </button>
 
               <button className="rounded-2xl border border-abu-perak bg-putih-bersih px-4 py-3 font-semibold text-dark-slate transition-all duration-300 hover:border-sage hover:bg-mint-lembut">

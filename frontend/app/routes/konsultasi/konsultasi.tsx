@@ -1,5 +1,6 @@
 
-import { RiCustomerService2Line } from 'react-icons/ri';
+
+import { RiContactsBookUploadFill } from "@remixicon/react";
 
 export default function Konsultasi() {
   return (
@@ -12,7 +13,6 @@ export default function Konsultasi() {
         }}
       />
 
-      {/* 2. LAPISAN GRADASI WARNA DAN BLUR OVERLAY */}
       <div className="absolute inset-0 z-10 bg-gradient-to-br from-mint-lembut/40 via-putih-bersih/60 to-champagne/40" />
 
       <div className="absolute bottom-[-150px] left-[-150px] z-10 h-[450px] w-[450px] rounded-full bg-hijau-zamrud/10 blur-3xl" />
@@ -22,7 +22,7 @@ export default function Konsultasi() {
       <div className="relative z-20 flex min-h-[calc(100vh-120px)] flex-col items-center justify-center px-6 text-center">
 
         <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg border border-hijau-zamrud/20">
-          <RiCustomerService2Line size={48} className="text-hijau-uin" />
+          <RiContactsBookUploadFill size={48} className="text-hijau-uin" />
         </div>
 
         <h1 className="mt-8 text-5xl font-bold tracking-tight text-hijau-botol md:text-7xl">

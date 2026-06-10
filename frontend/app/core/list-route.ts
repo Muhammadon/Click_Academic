@@ -5,43 +5,41 @@ import {
   RiHistoryLine,
   RiUserLine,
   RiBankCardLine,
-  RiLoginCircleLine,
-  RiUserAddLine,
   type RemixiconComponentType,
 } from "@remixicon/react";
 
 export interface MenuItem {
   title: string;
   icon: RemixiconComponentType;
-  path?: string;
+  path: string;
   children?: MenuItem[];
 }
 // sidebar-menu.ts
 
-export const sidebarRouteMenu: MenuItem = [
+export const sidebarRouteMenu: MenuItem[] = [
   {
     title: "Dashboard",
     path: "/",
     icon: RiDashboardLine,
   },
-
   {
     title: "Kelas",
+    path: "/kelas",
     icon: RiBookOpenLine,
     children: [
       {
         title: "Daftar Kelas",
-        path: "/kelas/daftarKelas",
+        path: "/kelas/daftar",
         icon: RiBookOpenLine,
       },
       {
         title: "Booking Kelas",
-        path: "/kelas/bookingKelas",
+        path: "/kelas/booking",
         icon: RiCalendarCheckLine,
       },
       {
         title: "History Kelas",
-        path: "/kelas/historyKelas",
+        path: "/kelas/history",
         icon: RiHistoryLine,
       },
     ],
@@ -49,11 +47,12 @@ export const sidebarRouteMenu: MenuItem = [
 
   {
     title: "Konsultasi",
+    path: "/konsultasi",
     icon: RiUserLine,
     children: [
       {
         title: "Daftar Konsultasi",
-        path: "/konsultasi/daftarKonsultasi",
+        path: "/konsultasi/daftar",
         icon: RiBookOpenLine,
       },
       {
@@ -77,23 +76,24 @@ export const sidebarRouteMenu: MenuItem = [
 
   {
     title: "User",
+    path: "/user",
     icon: RiUserLine,
-    children: [
-      {
-        title: "Profile",
-        path: "/user",
-        icon: RiUserLine,
-      },
-      // {
-      //   title: "Sign In",
-      //   path: "/user/signIn",
-      //   icon: RiLoginCircleLine,
-      // },
-      // {
-      //   title: "Sign Up",
-      //   path: "/user/signUp",
-      //   icon: RiUserAddLine,
-      // },
-    ],
+    // children: [
+    //   {
+    //     title: "Profile",
+    //     path: "/user",
+    //     icon: RiUserLine,
+    //   },
+    // {
+    //   title: "Sign In",
+    //   path: "/user/signIn",
+    //   icon: RiLoginCircleLine,
+    // },
+    // {
+    //   title: "Sign Up",
+    //   path: "/user/signUp",
+    //   icon: RiUserAddLine,
+    // },
+    // ],
   },
 ];

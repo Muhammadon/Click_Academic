@@ -1,15 +1,22 @@
-import type { TypeApi } from "~/core/type";
+import { CourseLevel , type TypeClickApi } from "~/core/types";
+
+// 1. Definisikan Enum untuk nilai yang konstan
+export enum CourseCategory {
+  PROGRAMMING = "Programming",
+  DESIGN = "Design",
+  MARKETING = "Marketing"
+}
 
 
 
 // konsiltasi dan payment
-export const exampleApiData: TypeApi[] = [
+export const exampleApiData: TypeClickApi[] = [
   {
-    id: "CLS-001",
+    id: 1,
     title: "UI/UX Design Fundamental",
     description:
       "Belajar dasar UI/UX design mulai dari wireframe, design system, hingga prototyping.",
-    category: "Design",
+    category: "desain",
 
     mentor: "Dr. Ahmad Fauzi",
     mentorImage: "/mentor/ahmad-fauzi.png",
@@ -17,12 +24,12 @@ export const exampleApiData: TypeApi[] = [
     schedule: "Selasa & Jumat • 19:00 WIB",
     duration: "8 Minggu",
 
-    quota: 50,
+    quota: 30,
     totalStudents: 120,
 
     level: "Beginner",
 
-    price: "Gratis",
+    price: "200.000",
 
     // thumbnail: "/kelas/uiux.jpg",
 
@@ -55,7 +62,7 @@ export const exampleApiData: TypeApi[] = [
     quota: 40,
     totalStudents: 210,
 
-    level: "Intermediate",
+    level: CourseLevel.ADVANCED,
 
     price: 75000,
 
@@ -79,7 +86,7 @@ export const exampleApiData: TypeApi[] = [
     title: "Cyber Security Essentials",
     description:
       "Dasar keamanan siber, penetration testing, dan keamanan jaringan.",
-    category: "Security",
+    category: CourseCategory.PROGRAMMING ,
 
     mentor: "Irfan Maulana",
     mentorImage: "/mentor/irfan.png",
@@ -90,7 +97,7 @@ export const exampleApiData: TypeApi[] = [
     quota: 35,
     totalStudents: 180,
 
-    level: "Advanced",
+    level: CourseLevel.ADVANCED,
 
     price: 100000,
 
@@ -146,77 +153,6 @@ export const exampleApiData: TypeApi[] = [
 
     createdAt: "2026-03-10",
     updatedAt: "2026-05-18",
-  },
-
-  {
-    id: "CLS-005",
-    title: "Public Speaking & Leadership",
-    description:
-      "Meningkatkan kemampuan komunikasi, presentasi, dan kepemimpinan.",
-    category: "Soft Skill",
-
-    mentor: "Nurul Hasanah",
-    mentorImage: "/mentor/nurul.png",
-
-    schedule: "Jumat • 16:00 WIB",
-    duration: "6 Minggu",
-
-    quota: 30,
-    totalStudents: 140,
-
-    level: "All Level",
-
-    price: "Gratis",
-
-    // thumbnail: "/kelas/public-speaking.jpg",
-
-    color: "from-terracotta to-burnt-orange",
-
-    status: "Open",
-
-    rating: 4.6,
-    totalReviews: 145,
-
-    // hasCertificate: true,
-
-    createdAt: "2026-04-01",
-    updatedAt: "2026-05-22",
-  },
-
-  {
-    id: "CLS-006",
-    title: "Mobile App Development Flutter",
-    description: "Membangun aplikasi mobile Android & iOS menggunakan Flutter.",
-    category: "Mobile",
-
-    mentor: "Aulia Putri",
-    mentorImage: "/mentor/aulia.png",
-
-    schedule: "Minggu • 10:00 WIB",
-    duration: "10 Minggu",
-
-    quota: 25,
-    totalStudents: 165,
-
-    level: "Intermediate",
-
-    price: 85000,
-
-    // thumbnail: "/kelas/flutter.jpg",
-
-    color: "from-hijau-lumut to-hijau-zamrud",
-
-    status: "Full",
-
-    progress: 0,
-
-    rating: 4.9,
-    totalReviews: 410,
-
-    // hasCertificate: true,
-
-    createdAt: "2026-04-15",
-    updatedAt: "2026-05-23",
   },
 ];
 
