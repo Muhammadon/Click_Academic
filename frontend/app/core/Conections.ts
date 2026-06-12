@@ -1,40 +1,71 @@
-export const PATHSERVER: string = "http://127.0.0.1:8000";
+import type { TypeResponseUserApi, TypeUserApi } from "./types";
+
+// export const PATHSERVER: string = "http://192.168.190.44:8000/api";
+export const PATHSERVER: string = "http://127.0.0.1:8000/api";
+
+export const SignIn = PATHSERVER + "/login";
+export const SignUp = PATHSERVER + "/register";
+export const Mentorings = PATHSERVER + "/mentorings";
+export const History = PATHSERVER + "/histori";
+export const Bookings = PATHSERVER + "/bookings";
+
+// di sini saya menguunakan Generic agar sesui dengan typenya nantik
+
 // export function GETdata() : Promise
 
-/*
- * dapatkan data dari backEnd
+/**
+ * Fungsi universal untuk mengambil/mengirim data ke Backend
  */
-export async function GetApiData(url: string) {
+export async function GetApiData<Type>(
+  url: string,
+  options?: RequestInit,
+): Promise<Type> {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, options);
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    const data = await response.json();
 
-    console.log("data yang di dapat : ", data);
-    return data;
+    const data = await response.json();
+    console.log("Data yang didapat:", data);
+
+    return data as Type;
   } catch (error) {
-    // Handle network errors or issues with the response parsing
     console.error("Failed to fetch data:", error);
+    // Lempar kembali error agar komponen React tahu kalau request gagal
+    throw error;
   }
 }
-
-export async function sendPostData(url: string, data: any) {
+// 1. Tentukan return type berupa Promise<TypeResponseUserApi>
+export async function sendPostData<Type>(
+  url: string,
+  data: any,
+  token?: string,
+): Promise<Type> {
   try {
-    fetch(url, {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Memberitahu server bahwa data berbentuk JSON
-        // 'Authorization': 'Bearer TOKEN_ANDA' // Tambahkan jika API butuh autentikasi
+        "Content-Type": "application/json",
+        // Biasanya Laravel Passport/Sanctum membutuhkan prefix 'Bearer '
+        Authorization: token ? `Bearer ${token}` : "",
       },
-      body: JSON.stringify(data), // Mengubah objek TypeScript menjadi string JSON
-    })
-      .then((data) => data.json())
-      .then((data) => {
-        console.info(data);
-      });
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // Biarkan response.json() mengikuti 'Type' yang diminta saat fungsi dipanggil
+    const result = await response.json();
+
+    console.info("Berhasil menerima response dari Laravel:", result);
+
+    return result as Type;
   } catch (err) {
     console.error("Gagal mengirim data:", err);
+    throw err;
   }
 }

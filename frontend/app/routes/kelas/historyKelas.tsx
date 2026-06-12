@@ -23,7 +23,7 @@ export default function ClassHistoryPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-hijau-botol via-hijau-uin to-deep-teal px-6 py-16 text-putih-bersih lg:px-10">
+      <section className="relative overflow-hidden bg-linear-to-r from-hijau-botol via-hijau-uin to-deep-teal px-6 py-16 text-putih-bersih lg:px-10">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-kuning-emas/10 blur-3xl" />
         <div className="absolute bottom-0 left-0 h-80 w-80 rounded-full bg-soft-ochre/10 blur-3xl" />
 

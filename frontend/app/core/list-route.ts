@@ -37,11 +37,11 @@ export const sidebarRouteMenu: MenuItem[] = [
         path: "/kelas/booking",
         icon: RiCalendarCheckLine,
       },
-      {
-        title: "History Kelas",
-        path: "/kelas/history",
-        icon: RiHistoryLine,
-      },
+      // {
+      //   title: "History Kelas",
+      //   path: "/kelas/history",
+      //   icon: RiHistoryLine,
+      // },
     ],
   },
 
@@ -55,14 +55,14 @@ export const sidebarRouteMenu: MenuItem[] = [
         path: "/konsultasi/daftar",
         icon: RiBookOpenLine,
       },
-      {
-        title: "Booking Konsultasi",
-        path: "/konsultasi/bookingKonsultasi",
-        icon: RiCalendarCheckLine,
-      },
+      // {
+      //   title: "Booking Konsultasi",
+      //   path: "/konsultasi/bookingKonsultasi",
+      //   icon: RiCalendarCheckLine,
+      // },
       {
         title: "History Konsultasi",
-        path: "/konsultasi/historyKonsultasi",
+        path: "/konsultasi/histori",
         icon: RiHistoryLine,
       },
     ],

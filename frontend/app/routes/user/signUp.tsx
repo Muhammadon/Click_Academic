@@ -1,11 +1,77 @@
-import { PATHSERVER } from "~/core/Conections";
+import {
+  RiCheckboxCircleLine,
+  RiErrorWarningLine,
+  RiUserSharedLine,
+} from "@remixicon/react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+
+import { sendPostData, SignUp } from "~/core/Conections";
+import { type TypeResponseUserApi, type TypeUserApi } from "~/core/types";
 
 export default function SignUpPage() {
+  const [dataUser, setDataUser] = useState<TypeUserApi>({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
+  const handleInputChange = (field: keyof TypeUserApi, value: string) => {
+    setDataUser((prev) => ({
+      ...prev,
+      [field]: value, // Memperbarui field secara real-time
+    }));
+  };
+
+  const handleSendServer = async (e: React.FormEvent) => {
+    e.preventDefault(); // Mencegah reload halaman bawaan browser
+    setMessage("");
+
+    // Validasi Klien: Pastikan password dan konfirmasi cocok sebelum menembak API
+    if (dataUser.password !== confirmPassword) {
+      setIsSuccess(false);
+      setMessage("Konfirmasi password tidak cocok!");
+      return;
+    }
+
+    try {
+      const response = await sendPostData<TypeResponseUserApi>(
+        SignUp,
+        dataUser,
+      );
+
+      // Menampilkan feedback dinamis dari properti status dan message backend Laravel
+      if (response.status === "success" || response.status === "true") {
+        console.info("Data User:", response.data);
+        setIsSuccess(true);
+        setMessage(
+          "Registrasi Berhasil! Mengalihkan ke halaman Sign In dalam 3 detik...",
+        );
+
+        setTimeout(() => {
+          navigate("/user/signIn");
+        }, 3000);
+      } else {
+        setIsSuccess(false);
+        setMessage(`Gagal: ${response.message}`);
+      }
+    } catch (error) {
+      console.error("Error submit:", error);
+      setIsSuccess(false);
+      setMessage(`Registrasi Gagal! Terjadi kesalahan koneksi atau server`);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-mint-lembut via-putih-bersih to-cream px-4 py-10 flex items-center justify-center">
-      <div className="w-full max-w-7xl overflow-hidden rounded-[32px] border border-abu-perak bg-putih-bersih shadow-2xl">
+    <div className="min-h-screen bg-linear-to-br from-mint-lembut via-putih-bersih to-cream px-4 py-10 flex items-center justify-center">
+      <div className="w-full max-w-7xl overflow-hidden rounded-4xl border border-abu-perak bg-putih-bersih text-black shadow-2xl">
         <div className="grid lg:grid-cols-2">
-          {/* Left Content */}
+          {/* Left Content Column */}
           <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-deep-teal via-hijau-botol to-hijau-uin p-10 text-putih-bersih">
             <div className="absolute top-0 right-0 h-80 w-80 rounded-full bg-kuning-emas/20 blur-3xl" />
             <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-soft-ochre/10 blur-3xl" />
@@ -34,18 +100,14 @@ export default function SignUpPage() {
 
             <div className="relative z-10 grid grid-cols-2 gap-5 mt-10">
               <div className="rounded-3xl border border-putih-bersih/10 bg-putih-bersih/10 p-5 backdrop-blur-sm">
-                <div className="text-4xl font-black text-kuning-emas">
-                  24/7
-                </div>
+                <div className="text-4xl font-black text-kuning-emas">24/7</div>
                 <p className="mt-2 text-sm leading-6 text-putih-bersih/70">
                   Akses platform pembelajaran dan konsultasi kapan saja.
                 </p>
               </div>
 
               <div className="rounded-3xl border border-putih-bersih/10 bg-putih-bersih/10 p-5 backdrop-blur-sm">
-                <div className="text-4xl font-black text-soft-ochre">
-                  100+
-                </div>
+                <div className="text-4xl font-black text-soft-ochre">100+</div>
                 <p className="mt-2 text-sm leading-6 text-putih-bersih/70">
                   Program pelatihan dan mentoring aktif setiap semester.
                 </p>
@@ -53,11 +115,12 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-16 bg-putih-bersih">
+          {/* Right Form Column - Diberikan relative z-50 agar lapisan form berada paling atas */}
+          <div className="relative z-50 flex items-center justify-center px-6 py-10 sm:px-10 lg:px-16 bg-putih-bersih">
             <div className="w-full max-w-xl">
-              <div className="mb-8">
+              <div className="mb-6">
                 <div className="inline-flex items-center rounded-full border border-pale-eucalyptus bg-mint-lembut px-4 py-2 text-sm font-semibold text-hijau-botol">
-                  Registrasi Mahasiswa 🎓
+                  Registrasi Mahasiswa
                 </div>
 
                 <h2 className="mt-5 text-4xl font-black text-charcoal">
@@ -70,82 +133,79 @@ export default function SignUpPage() {
                 </p>
               </div>
 
-              <form className="space-y-5" action={PATHSERVER} method="POST">
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div>
-                    <label className="mb-2 block text-sm font-semibold text-dark-slate">
-                      Nama Depan
-                    </label>
-
-                    <input
-                      type="text"
-                      placeholder="Muhammad"
-                      className="w-full rounded-2xl border border-sage/40 bg-putih-bersih px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
-                    />
+              {/* TAMPILAN MESSAGE NOTIFIKASI DI SINI */}
+              {message && (
+                <div
+                  className={`mb-6 flex items-start gap-3 rounded-2xl p-4 text-sm font-semibold border transition-all duration-300 animate-in fade-in slide-in-from-top-2 ${
+                    isSuccess
+                      ? "bg-emerald-50 text-hijau-botol border-emerald-200"
+                      : "bg-rose-50 text-terracotta border-rose-200"
+                  }`}
+                >
+                  <div className="mt-0.5 shrink-0">
+                    {isSuccess ? (
+                      <RiCheckboxCircleLine
+                        size={20}
+                        className="text-hijau-zamrud"
+                      />
+                    ) : (
+                      <RiErrorWarningLine
+                        size={20}
+                        className="text-terracotta"
+                      />
+                    )}
                   </div>
+                  <div>{message}</div>
+                </div>
+              )}
 
-                  <div>
-                    <label className="mb-2 block text-sm font-semibold text-dark-slate">
-                      Nama Belakang
-                    </label>
-
-                    <input
-                      type="text"
-                      placeholder="Nadhar"
-                      className="w-full rounded-2xl border border-sage/40 bg-putih-bersih px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
-                    />
-                  </div>
+              <form onSubmit={handleSendServer} className="space-y-5">
+                {/* Kolom Username tunggal (Menghapus gabungan Nama Depan/Belakang) */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-dark-slate">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Masukkan username Anda"
+                    required
+                    value={dataUser.username}
+                    onChange={(e) =>
+                      handleInputChange("username", e.target.value)
+                    }
+                    className="w-full rounded-2xl border border-sage/40 bg-putih-bersih text-black px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
+                  />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-dark-slate">
                     Email Kampus
                   </label>
-
                   <input
                     type="email"
                     placeholder="mahasiswa@kampus.ac.id"
-                    className="w-full rounded-2xl border border-sage/40 bg-putih-bersih px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
+                    required
+                    value={dataUser.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    className="w-full rounded-2xl border border-sage/40 bg-putih-bersih text-black px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
                   />
                 </div>
 
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div>
-                    <label className="mb-2 block text-sm font-semibold text-dark-slate">
-                      NIM
-                    </label>
-
-                    <input
-                      type="text"
-                      placeholder="22000123"
-                      className="w-full rounded-2xl border border-sage/40 bg-putih-bersih px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm font-semibold text-dark-slate">
-                      Fakultas
-                    </label>
-
-                    <select className="w-full rounded-2xl border border-sage/40 bg-putih-bersih px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20">
-                      <option>Teknik</option>
-                      <option>Ekonomi</option>
-                      <option>Hukum</option>
-                      <option>Tarbiyah</option>
-                    </select>
-                  </div>
-                </div>
-
+                {/* Baris Password & Konfirmasi Password */}
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm font-semibold text-dark-slate">
                       Password
                     </label>
-
                     <input
                       type="password"
                       placeholder="••••••••"
-                      className="w-full rounded-2xl border border-sage/40 bg-putih-bersih px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
+                      required
+                      value={dataUser.password}
+                      onChange={(e) =>
+                        handleInputChange("password", e.target.value)
+                      }
+                      className="w-full rounded-2xl border border-sage/40 bg-putih-bersih text-black px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
                     />
                   </div>
 
@@ -153,67 +213,34 @@ export default function SignUpPage() {
                     <label className="mb-2 block text-sm font-semibold text-dark-slate">
                       Konfirmasi Password
                     </label>
-
                     <input
                       type="password"
                       placeholder="••••••••"
-                      className="w-full rounded-2xl border border-sage/40 bg-putih-bersih px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full rounded-2xl border border-sage/40 bg-putih-bersih text-black px-5 py-4 outline-none transition-all duration-300 focus:border-hijau-zamrud focus:ring-4 focus:ring-hijau-zamrud/20"
                     />
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 rounded-2xl border border-champagne bg-cream p-4">
-                  <input
-                    type="checkbox"
-                    className="mt-1 h-4 w-4 rounded border-sage text-hijau-zamrud focus:ring-hijau-zamrud"
-                  />
-
-                  <p className="text-sm leading-6 text-dark-slate/80">
-                    Saya menyetujui syarat penggunaan platform dan kebijakan
-                    privasi sistem konsultasi akademik.
-                  </p>
-                </div>
-
                 <button
                   type="submit"
-                  className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-hijau-zamrud px-5 py-4 text-base font-bold text-putih-bersih shadow-lg shadow-hijau-zamrud/30 transition-all duration-300 hover:bg-hijau-botol hover:shadow-xl hover:shadow-hijau-botol/30"
+                  className="w-full mt-4 cursor-pointer rounded-2xl bg-linier-to-r from-deep-teal to-hijau-botol px-5 py-4 font-bold text-putih-bersih transition-all duration-300 hover:opacity-90 shadow-lg"
                 >
-                  Buat Akun Sekarang
-
-                  <span className="transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
+                  Daftar Sekarang
                 </button>
               </form>
 
-              <div className="relative my-8">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-abu-perak" />
-                </div>
-
-                <div className="relative flex justify-center text-sm">
-                  <span className="bg-putih-bersih px-4 text-dark-slate/60">
-                    atau daftar menggunakan
-                  </span>
-                </div>
+              <div className="w-full p-3 flex justify-center items-center">
+                <Link
+                  to="/user/signIn"
+                  className="inline-flex items-center gap-2 rounded-full border border-pale-eucalyptus bg-mint-lembut px-4 py-1.5 text-xs font-semibold text-hijau-botol transition-all duration-300 hover:bg-hijau-botol hover:text-putih-bersih hover:shadow-md"
+                >
+                  <RiUserSharedLine size={14} />
+                  <span>Sudah punya akun? Sign In</span>
+                </Link>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <button className="rounded-2xl border border-abu-perak bg-putih-bersih px-4 py-3 font-semibold text-dark-slate transition-all duration-300 hover:border-sage hover:bg-mint-lembut">
-                  Google
-                </button>
-
-                <button className="rounded-2xl border border-abu-perak bg-putih-bersih px-4 py-3 font-semibold text-dark-slate transition-all duration-300 hover:border-sage hover:bg-mint-lembut">
-                  SSO Kampus
-                </button>
-              </div>
-
-              <p className="mt-8 text-center text-sm text-dark-slate/70">
-                Sudah memiliki akun?{' '}
-                <button className="font-semibold text-terracotta transition-colors hover:text-burnt-orange">
-                  Masuk Sekarang
-                </button>
-              </p>
             </div>
           </div>
         </div>
@@ -221,4 +248,3 @@ export default function SignUpPage() {
     </div>
   );
 }
-

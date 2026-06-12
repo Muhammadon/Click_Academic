@@ -12,14 +12,14 @@ class AuthController extends Controller
     // Fungsi untuk mendaftar akun baru
     public function register(Request $request)
     {
-        // 1. Validasi data yang dikirim Frontend
+        //  Validasi data yang dikirim Frontend
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6'
         ]);
 
-        // 2. Simpan data mahasiswa ke database
+        // Simpan data mahasiswa ke database
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -37,16 +37,16 @@ class AuthController extends Controller
     // Fungsi untuk masuk dan mendapatkan Token
     public function login(Request $request)
     {
-        // 1. Validasi input
+        //  Validasi input
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        // 2. Cari user berdasarkan email
+        // Cari user berdasarkan email
         $user = User::where('email', $request->email)->first();
 
-        // 3. Cek apakah user ada dan passwordnya benar
+        // Cek apakah user ada dan passwordnya benar
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => 'error',
@@ -54,7 +54,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // 4. Buatkan Token keamanan (Sanctum)
+        // Buatkan Token keamanan (Sanctum)
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -64,4 +64,33 @@ class AuthController extends Controller
             'user' => $user
         ], 200);
     }
+
+
+
+
+// Fungsi untuk mendapatkan data profil user yang sedang login
+public function getUser(Request $request)
+{
+    // Mengambil data user yang sedang login melalui token auth
+    $user = $request->user();
+
+    // Jika user tidak ditemukan (opsional, sebagai antisipasi jika middleware lolos)
+    if (!$user) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'User tidak terautentikasi'
+        ], 401);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Data user berhasil didapatkan',
+        'data' => [
+            'id' => $user->id,
+            'username' => $user->name, // Disesuaikan dengan field name di DB Anda
+            'email' => $user->email,
+            'role' => $user->role
+        ]
+    ], 200);
+}
 }

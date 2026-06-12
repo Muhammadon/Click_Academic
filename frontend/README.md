@@ -27,15 +27,21 @@ FrontEnd View
   </a>
 </p>
 
-
-### Tech info 
-
-
+### Tech info
 
 - `React` : framework FronEnd
 - `React router` : untuk handle naviagsi agar tidak hanya single page
 - `tailwindcss` : framework styling with class from css
 - `remixicon` : icon untuk aplikasi ini
+
+### App info
+
+- User yang login di simpan token login nya ke local storeage , dengan nama
+
+```bash
+# token untuk user
+user_data
+```
 
 ### App COlor
 

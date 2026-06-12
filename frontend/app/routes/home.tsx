@@ -1,17 +1,14 @@
 import type { Route } from "./+types/home";
 import { Link } from "react-router";
 
-
-export function meta({ }: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
+    { title: "Client" },
     { name: "description", content: "Welcome to React Router!" },
   ];
 }
 
 export default function Home() {
-
-
   return (
     <div className="relative min-h-screen overflow-hidden bg-mint-lembut">
       {/* Background */}
@@ -24,7 +21,7 @@ export default function Home() {
       />
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-charcoal/85 via-hijau-botol/70 to-deep-teal/80" />
+      <div className="absolute inset-0 bg-linear-to-br from-charcoal/85 via-hijau-botol/70 to-deep-teal/80" />
 
       <header className="relative z-10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
@@ -64,8 +61,10 @@ export default function Home() {
             </a>
           </nav> */}
 
-
-          < Link to={"/user/SignIn"} className="rounded-2xl bg-kuning-emas px-5 py-3 text-sm font-bold text-charcoal transition-all duration-300 hover:bg-soft-ochre">
+          <Link
+            to={"/user/SignIn"}
+            className="rounded-2xl bg-kuning-emas px-5 py-3 text-sm font-bold text-charcoal transition-all duration-300 hover:bg-soft-ochre"
+          >
             Sign In
           </Link>
         </div>
@@ -95,15 +94,12 @@ export default function Home() {
           </p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-5">
-
             <button className="rounded-2xl border border-putih-bersih/20 bg-putih-bersih/10 px-8 py-4 text-base font-bold text-putih-bersih backdrop-blur-xl transition-all duration-300 hover:bg-putih-bersih/20">
               Lihat Kelas
             </button>
             <button className="rounded-2xl bg-hijau-zamrud px-8 py-4 text-base font-bold text-putih-bersih shadow-xl shadow-hijau-zamrud/30 transition-all duration-300 hover:bg-hijau-botol">
               Konsultasi
             </button>
-
-
           </div>
         </div>
       </main>
