@@ -49,8 +49,10 @@ export default function SignInPage() {
         formData,
       );
 
+      console.info("data login : ", response);
+
       if (
-        response.user &&
+        response.data &&
         (response.message === "success" ||
           (response as any).status === "success")
       ) {
@@ -65,11 +67,25 @@ export default function SignInPage() {
         }, 3000);
       } else {
         setIsSuccess(false);
+        console.info("execusis :", response.message);
         setMessage(response.message || "Email atau password salah.");
       }
-    } catch (error) {
+    } catch (error: any) {
       setIsSuccess(false);
-      setMessage("Gagal terhubung ke server. Periksa jaringan Anda.");
+      console.error("Error ditangkap di UI:", error);
+
+      // // Cek apakah error mengandung info status 401 dari sendPostData
+      // if (error.message && error.message.includes("401")) {
+      //   // Ini adalah error terencana dari Laravel (Kredensial salah)
+      //   setMessage("Akun tidak di temukan");
+      // } else {
+      //   // Ini adalah error jika server Laravel mati / jaringan terputus
+      //   setMessage(
+      //     "Gagal terhubung ke server. Periksa jaringan atau coba lagi nanti.",
+      //   );
+      // }
+
+      setMessage(error.message || "Terjadi kesalahan koneksi atau server.");
     } finally {
       setIsLoading(false);
     }

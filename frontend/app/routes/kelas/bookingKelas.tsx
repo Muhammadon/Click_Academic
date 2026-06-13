@@ -1,8 +1,13 @@
-import { exampleApiData } from "~/example/exampleApiData";
 import { RiCalendarView } from "@remixicon/react";
 
 import { useEffect, useState } from "react";
-import type { BookingDetail, CreateBookingRequest, CreateBookingResponse, Mentoring, MentoringListResponse } from "~/core/types";
+import type {
+  BookingDetail,
+  CreateBookingRequest,
+  CreateBookingResponse,
+  Mentoring,
+  MentoringListResponse,
+} from "~/core/types";
 import { Bookings, GetApiData, sendPostData } from "~/core/Conections";
 // Import kedua helper API (GET dan POST) yang sudah kita buat sebelumnya
 // Import interfaces akademik Anda
@@ -12,15 +17,16 @@ export default function BookingClassPage() {
   const [mentoringList, setMentoringList] = useState<Mentoring[]>([]);
   // State untuk melacak data kelas yang sedang dipilih untuk masuk ke Ringkasan Booking (Sidebar)
   const [selectedClass, setSelectedClass] = useState<Mentoring | null>(null);
-  
+
   // States untuk handling status server dan loading
   const [isFetchLoading, setIsFetchLoading] = useState<boolean>(true);
   const [isSubmittingId, setIsSubmittingId] = useState<number | null>(null);
-  
+
   // States untuk handling error message (Fetch & Post)
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [bookingError, setBookingError] = useState<string | null>(null);
-  const [bookingSuccessData, setBookingSuccessData] = useState<BookingDetail | null>(null);
+  const [bookingSuccessData, setBookingSuccessData] =
+    useState<BookingDetail | null>(null);
 
   // 1. Fetch data daftar kelas dari server saat halaman pertama kali dimuat
   useEffect(() => {
@@ -36,7 +42,9 @@ export default function BookingClassPage() {
         }
       } catch (error: any) {
         // Menangkap kondisi jika server tidak aktif / offline / rto
-        setFetchError("Server tidak merespons. Silakan periksa koneksi internet Anda atau hubungi admin.");
+        setFetchError(
+          "Server tidak merespons. Silakan periksa koneksi internet Anda atau hubungi admin.",
+        );
       } finally {
         setIsFetchLoading(false);
       }
@@ -56,25 +64,30 @@ export default function BookingClassPage() {
     };
 
     try {
-      const response = await sendPostData<CreateBookingResponse>(Bookings, payload);
+      const response = await sendPostData<CreateBookingResponse>(
+        Bookings,
+        payload,
+      );
 
       if (response.status === "success") {
         setBookingSuccessData(response.data);
-        
+
         // Integrasi Midtrans Snap jika script terdeteksi
         if ((window as any).snap) {
           (window as any).snap.pay(response.data.snap_token, {
             onSuccess: () => alert("Pembayaran sukses!"),
             onPending: () => alert("Menunggu pembayaran."),
             onError: () => alert("Pembayaran gagal."),
-            onClose: () => alert("Popup ditutup.")
+            onClose: () => alert("Popup ditutup."),
           });
         } else {
           alert(`Booking Sukses! Order ID: ${response.data.order_id}`);
         }
       }
     } catch (error: any) {
-      setBookingError(error.message || "Gagal terhubung ke server pembayaran Midtrans.");
+      setBookingError(
+        error.message || "Gagal terhubung ke server pembayaran Midtrans.",
+      );
     } finally {
       setIsSubmittingId(null);
     }
@@ -125,7 +138,6 @@ export default function BookingClassPage() {
 
       {/* Main Content Area */}
       <section className="mx-auto grid max-w-7xl gap-8 px-6 py-12 lg:grid-cols-[1fr_380px] lg:px-10">
-        
         {/* KOLOM KIRI: Daftar Kelas dari Server */}
         <div className="space-y-7">
           {bookingError && (
@@ -136,7 +148,8 @@ export default function BookingClassPage() {
 
           {bookingSuccessData && (
             <div className="rounded-2xl border border-hijau-zamrud/20 bg-mint-lembut p-4 text-sm font-semibold text-hijau-botol">
-              ✅ Tiket Berhasil Dipesan! Order ID: <span className="font-mono">{bookingSuccessData.order_id}</span>
+              ✅ Tiket Berhasil Dipesan! Order ID:{" "}
+              <span className="font-mono">{bookingSuccessData.order_id}</span>
             </div>
           )}
 
@@ -144,7 +157,10 @@ export default function BookingClassPage() {
           {isFetchLoading && (
             <div className="space-y-5">
               {[...Array(2)].map((_, i) => (
-                <div key={i} className="animate-pulse rounded-[32px] bg-putih-bersih p-8 h-56 border border-abu-perak" />
+                <div
+                  key={i}
+                  className="animate-pulse rounded-[32px] bg-putih-bersih p-8 h-56 border border-abu-perak"
+                />
               ))}
             </div>
           )}
@@ -155,11 +171,13 @@ export default function BookingClassPage() {
               <div className="mx-auto flex h-16 w-16 items-center justify-between rounded-full bg-terracotta/10 text-center text-3xl justify-center text-terracotta">
                 📡
               </div>
-              <h3 className="mt-5 text-xl font-bold text-charcoal">Koneksi Server Terputus</h3>
+              <h3 className="mt-5 text-xl font-bold text-charcoal">
+                Koneksi Server Terputus
+              </h3>
               <p className="mt-2 text-sm text-dark-slate/75 max-w-md mx-auto">
                 {fetchError}
               </p>
-              <button 
+              <button
                 onClick={() => window.location.reload()}
                 className="mt-6 rounded-xl bg-hijau-botol px-5 py-2.5 text-sm font-bold text-putih-bersih hover:bg-hijau-uin transition-colors"
               >
@@ -172,67 +190,80 @@ export default function BookingClassPage() {
           {!isFetchLoading && !fetchError && mentoringList.length === 0 && (
             <div className="rounded-[32px] border border-sage/20 bg-putih-bersih p-10 text-center shadow-lg">
               <div className="text-4xl">📭</div>
-              <h3 className="mt-4 text-lg font-bold text-charcoal">Belum Ada Jadwal Tersedia</h3>
+              <h3 className="mt-4 text-lg font-bold text-charcoal">
+                Belum Ada Jadwal Tersedia
+              </h3>
               <p className="mt-1 text-sm text-dark-slate/70">
-                Tidak ada kelas mentoring aktif yang dapat dipesan untuk saat ini.
+                Tidak ada kelas mentoring aktif yang dapat dipesan untuk saat
+                ini.
               </p>
             </div>
           )}
 
           {/* KONDISI 4: Server Aktif & Data Berhasil Di-render */}
-          {!isFetchLoading && !fetchError && mentoringList.map((item) => (
-            <div
-              key={item.id}
-              className={`overflow-hidden rounded-[32px] border bg-putih-bersih shadow-lg transition-all duration-300 hover:-translate-y-1 ${
-                selectedClass?.id === item.id ? "border-hijau-zamrud ring-2 ring-hijau-zamrud/20" : "border-sage/20"
-              }`}
-            >
-              <div className="grid lg:grid-cols-[280px_1fr]">
-                {/* Visual Banner Kiri menggunakan warna statis bertema hijau botol */}
-                <div className="relative overflow-hidden bg-gradient-to-br from-hijau-botol to-toska-tua p-8 text-putih-bersih">
-                  <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-putih-bersih/10 blur-2xl" />
-                  <div className="relative z-10 flex h-full flex-col justify-between">
-                    <div>
-                      <span className="rounded-full bg-putih-bersih/10 border border-putih-bersih/20 px-3 py-1 text-xs font-bold">
-                        ID: #{item.id}
-                      </span>
-                      <h3 className="mt-4 text-xl font-black leading-tight line-clamp-3">
-                        {item.title}
-                      </h3>
+          {!isFetchLoading &&
+            !fetchError &&
+            mentoringList.map((item) => (
+              <div
+                key={item.id}
+                className={`overflow-hidden rounded-[32px] border bg-putih-bersih shadow-lg transition-all duration-300 hover:-translate-y-1 ${
+                  selectedClass?.id === item.id
+                    ? "border-hijau-zamrud ring-2 ring-hijau-zamrud/20"
+                    : "border-sage/20"
+                }`}
+              >
+                <div className="grid lg:grid-cols-[280px_1fr]">
+                  {/* Visual Banner Kiri menggunakan warna statis bertema hijau botol */}
+                  <div className="relative overflow-hidden bg-gradient-to-br from-hijau-botol to-toska-tua p-8 text-putih-bersih">
+                    <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-putih-bersih/10 blur-2xl" />
+                    <div className="relative z-10 flex h-full flex-col justify-between">
+                      <div>
+                        <span className="rounded-full bg-putih-bersih/10 border border-putih-bersih/20 px-3 py-1 text-xs font-bold">
+                          ID: #{item.id}
+                        </span>
+                        <h3 className="mt-4 text-xl font-black leading-tight line-clamp-3">
+                          {item.title}
+                        </h3>
+                      </div>
+                      <p className="mt-4 text-xs text-putih-bersih/60">
+                        Academic Mentoring Program
+                      </p>
                     </div>
-                    <p className="mt-4 text-xs text-putih-bersih/60">Academic Mentoring Program</p>
-                  </div>
-                </div>
-
-                {/* Info Detail Kanan */}
-                <div className="p-8 flex flex-col justify-between">
-                  <div className="rounded-3xl bg-mint-lembut p-5">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-dark-slate/60">Biaya Investasi</p>
-                    <h4 className="mt-2 text-2xl font-black text-hijau-botol">
-                      {formatRupiah(item.price)}
-                    </h4>
                   </div>
 
-                  <div className="mt-6 flex gap-4">
-                    <button
-                      onClick={() => setSelectedClass(item)}
-                      className="rounded-2xl bg-hijau-zamrud px-5 py-3.5 text-sm font-bold text-putih-bersih transition-all duration-300 hover:bg-hijau-botol"
-                    >
-                      Pilih Kelas
-                    </button>
+                  {/* Info Detail Kanan */}
+                  <div className="p-8 flex flex-col justify-between">
+                    <div className="rounded-3xl bg-mint-lembut p-5">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-dark-slate/60">
+                        Biaya Investasi
+                      </p>
+                      <h4 className="mt-2 text-2xl font-black text-hijau-botol">
+                        {formatRupiah(item.price)}
+                      </h4>
+                    </div>
 
-                    <button
-                      disabled={isSubmittingId !== null}
-                      onClick={() => handleProcessBooking(item.id)}
-                      className="rounded-2xl border border-sage/30 bg-putih-bersih px-5 py-3.5 text-sm font-bold text-dark-slate transition-all duration-300 hover:bg-mint-lembut disabled:opacity-40"
-                    >
-                      {isSubmittingId === item.id ? "Memproses..." : "Instant Booking"}
-                    </button>
+                    <div className="mt-6 flex gap-4">
+                      <button
+                        onClick={() => setSelectedClass(item)}
+                        className="rounded-2xl bg-hijau-zamrud px-5 py-3.5 text-sm font-bold text-putih-bersih transition-all duration-300 hover:bg-hijau-botol"
+                      >
+                        Pilih Kelas
+                      </button>
+
+                      <button
+                        disabled={isSubmittingId !== null}
+                        onClick={() => handleProcessBooking(item.id)}
+                        className="rounded-2xl border border-sage/30 bg-putih-bersih px-5 py-3.5 text-sm font-bold text-dark-slate transition-all duration-300 hover:bg-mint-lembut disabled:opacity-40"
+                      >
+                        {isSubmittingId === item.id
+                          ? "Memproses..."
+                          : "Instant Booking"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         {/* KOLOM KANAN: Sticky Summary Widget */}
@@ -249,14 +280,18 @@ export default function BookingClassPage() {
             <>
               <div className="mt-8 space-y-5">
                 <div className="rounded-3xl bg-mint-lembut p-5">
-                  <p className="text-sm font-semibold text-dark-slate/70">Kelas Dipilih</p>
+                  <p className="text-sm font-semibold text-dark-slate/70">
+                    Kelas Dipilih
+                  </p>
                   <h4 className="mt-2 text-lg font-black text-hijau-botol">
                     {selectedClass.title}
                   </h4>
                 </div>
 
                 <div className="rounded-3xl bg-champagne p-5">
-                  <p className="text-sm font-semibold text-dark-slate/70">Total Pembayaran</p>
+                  <p className="text-sm font-semibold text-dark-slate/70">
+                    Total Pembayaran
+                  </p>
                   <h4 className="mt-2 text-2xl font-black text-olive">
                     {formatRupiah(selectedClass.price)}
                   </h4>
@@ -268,12 +303,17 @@ export default function BookingClassPage() {
                 onClick={() => handleProcessBooking(selectedClass.id)}
                 className="mt-8 w-full rounded-2xl bg-hijau-uin px-5 py-4 text-base font-bold text-putih-bersih transition-all duration-300 hover:bg-hijau-botol disabled:bg-abu-perak"
               >
-                {isSubmittingId === selectedClass.id ? "Menghubungkan..." : "Konfirmasi Booking"}
+                {isSubmittingId === selectedClass.id
+                  ? "Menghubungkan..."
+                  : "Konfirmasi Booking"}
               </button>
             </>
           ) : (
             <div className="my-12 text-center text-dark-slate/50">
-              <p className="text-sm">Silakan pilih salah satu kelas di sebelah kiri untuk meninjau detail checkout.</p>
+              <p className="text-sm">
+                Silakan pilih salah satu kelas di sebelah kiri untuk meninjau
+                detail checkout.
+              </p>
             </div>
           )}
         </div>

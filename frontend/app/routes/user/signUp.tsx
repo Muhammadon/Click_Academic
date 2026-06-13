@@ -4,7 +4,7 @@ import {
   RiUserSharedLine,
 } from "@remixicon/react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, type ErrorResponse } from "react-router";
 
 import { sendPostData, SignUp } from "~/core/Conections";
 import { type TypeResponseUserApi, type TypeUserApi } from "~/core/types";
@@ -60,10 +60,11 @@ export default function SignUpPage() {
         setIsSuccess(false);
         setMessage(`Gagal: ${response.message}`);
       }
-    } catch (error) {
-      console.error("Error submit:", error);
+    } catch (error: any) {
+      console.error("Error submit ditangkap di UI:", error);
       setIsSuccess(false);
-      setMessage(`Registrasi Gagal! Terjadi kesalahan koneksi atau server`);
+
+      setMessage(error.message || "Terjadi kesalahan koneksi atau server.");
     }
   };
 

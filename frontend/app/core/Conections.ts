@@ -5,6 +5,7 @@ export const PATHSERVER: string = "http://127.0.0.1:8000/api";
 
 export const SignIn = PATHSERVER + "/login";
 export const SignUp = PATHSERVER + "/register";
+export const User = PATHSERVER + "/user";
 export const Mentorings = PATHSERVER + "/mentorings";
 export const History = PATHSERVER + "/histori";
 export const Bookings = PATHSERVER + "/bookings";
@@ -48,14 +49,27 @@ export async function sendPostData<Type>(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
         // Biasanya Laravel Passport/Sanctum membutuhkan prefix 'Bearer '
         Authorization: token ? `Bearer ${token}` : "",
       },
       body: JSON.stringify(data),
     });
 
+    // JIKA TERJADI ERROR (422, 401, 500, dll)
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      try {
+        // Ambil JSON error yang kita susun di Laravel tadi
+        const errorData = await response.json();
+
+        // Lemparkan pesan teks dari Laravel agar ditangkap oleh catch di React
+        throw new Error(
+          errorData.message || `HTTP error! Status: ${response.status}`,
+        );
+      } catch (e: any) {
+        // Antisipasi jika server Laravel crash dan tidak mengembalikan JSON
+        throw new Error(e.message || `HTTP error! Status: ${response.status}`);
+      }
     }
 
     // Biarkan response.json() mengikuti 'Type' yang diminta saat fungsi dipanggil

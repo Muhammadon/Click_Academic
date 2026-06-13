@@ -1,46 +1,60 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { User as userPath } from "~/core/Conections";
 import {
-  RiUserLine,
   RiMailLine,
   RiPhoneLine,
   RiMapPinLine,
   RiBookLine,
   RiShieldUserLine,
 } from "@remixicon/react";
+import Sidebar from "~/component/sidebar";
 
-// 1. Definisikan interface sesuai dengan respons json data dari controller Laravel Anda
-interface UserProfileData {
-  id: number;
-  username: string;
-  email: string;
-  role: string;
-}
+import { GetApiData } from "~/core/Conections";
+import type { GetUserData } from "~/core/types";
 
 export default function User() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState<UserProfileData | null>(null);
+  const [userData, setUserData] = useState<GetUserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const localToken = localStorage.getItem("user_token");
 
-    if (!localToken) {
-      console.info("token tidka ada");
-      // Jika data tidak ada di localStorage, paksa redirect ke halaman signIn
-      navigate("/user/signIn");
-    } else {
+    async function fetchUserData() {
+      // 1. Jika token tidak ditemukan di localStorage
+      if (!localToken) {
+        console.info("Token tidak ada, mengalihkan ke halaman Sign In...");
+        setIsLoading(false);
+        navigate("/user/signIn");
+        return; // Stop eksekusi kode di bawahnya
+      }
+
+      // 2. Jika token ada, ambil data dari API Laravel
       try {
-        const parsedData = JSON.parse(localToken);
-        setUserData(parsedData);
+        const response = await GetApiData<GetUserData>(userPath, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${JSON.parse(localToken)}`, // Mengurai kutip token jika saat simpan menggunakan JSON.stringify
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === "success" && response) {
+          setUserData(response);
+        } else {
+          // Jika status response dari server error/401
+          navigate("/user/signIn");
+        }
       } catch (error) {
-        console.error("Error parsing user data:", error);
+        console.error("Gagal mengambil data user dari server:", error);
         navigate("/user/signIn");
       } finally {
         setIsLoading(false);
       }
     }
-  }, [navigate]);
+    fetchUserData();
+  }, [navigate, userPath]);
 
   // Tampilkan layar memuat kosong sejenak selagi proses verifikasi localStorage berjalan
   if (isLoading || !userData) {
@@ -48,7 +62,12 @@ export default function User() {
   }
 
   return (
-    <div className="min-h-screen bg-mint-lembut">
+
+    <div className="flex flex-col md:flex-row">
+
+<Sidebar/>
+
+    <div className="h-full w-full bg-mint-lembut overflow-y-scroll overflow-x-hidden">
       <section className="relative">
         <div className="h-52 md:h-72 bg-[var(--color-hijau-uin)]" />
 
@@ -60,7 +79,7 @@ export default function User() {
               className="h-full w-full object-cover"
               onError={(e) => {
                 // Fallback avatar jika gambar lokal /profile.jpg tidak ditemukan
-                e.currentTarget.src = `https://ui-avatars.com/api/?name=${userData.username}&background=0D9488&color=fff`;
+                e.currentTarget.src = `https://ui-avatars.com/api/?name=${userData.data.username}&background=0D9488&color=fff`;
               }}
             />
           </div>
@@ -71,11 +90,11 @@ export default function User() {
         <section className="text-center md:text-left mb-8">
           {/* Mengambil nilai nama/username dinamis dari Laravel */}
           <h1 className="text-3xl font-bold text-[var(--color-charcoal)] capitalize">
-            {userData.username}
+            {userData.data.username}
           </h1>
 
           <p className="text-[var(--color-dark-slate)] mt-2 uppercase text-xs font-bold tracking-wider bg-[var(--color-pale-eucalyptus)] inline-block px-3 py-1 rounded-full text-[var(--color-hijau-botol)]">
-            Hak Akses: {userData.role}
+            Hak Akses: {userData.data.role}
           </p>
 
           <div className="mt-4 flex justify-center md:justify-start gap-3">
@@ -103,19 +122,11 @@ export default function User() {
 
             <div className="space-y-5">
               <div className="flex items-center gap-3 text-sm text-[var(--color-dark-slate)]">
-                <RiUserLine
-                  size={20}
-                  className="text-[var(--color-toska-tua)] shrink-0"
-                />
-                <span>ID Pengguna: {userData.id}</span>
-              </div>
-
-              <div className="flex items-center gap-3 text-sm text-[var(--color-dark-slate)]">
                 <RiMailLine
                   size={20}
                   className="text-[var(--color-toska-tua)] shrink-0"
                 />
-                <span>{userData.email}</span>
+                <span>{userData.data.email}</span>
               </div>
 
               <div className="flex items-center gap-3 text-sm text-[var(--color-dark-slate)]">
@@ -167,7 +178,7 @@ export default function User() {
                   Sistem Role
                 </p>
                 <h3 className="text-lg font-extrabold mt-2 text-[var(--color-hijau-botol)] capitalize truncate">
-                  {userData.role}
+                  {userData.data.role}
                 </h3>
               </div>
             </div>
@@ -184,13 +195,14 @@ export default function User() {
             Saya adalah pengguna terdaftar pada Platform Konsultasi Akademik
             dengan hak akses sebagai{" "}
             <strong className="text-[var(--color-hijau-botol)] capitalize">
-              {userData.role}
+              {userData.data.role}
             </strong>
             . Fokus mengelola pemesanan kelas pelatihan, mentoring, serta
             administrasi konsultasi online secara digital.
           </p>
         </section>
       </main>
+    </div>
     </div>
   );
 }

@@ -14,8 +14,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Endpoint: GET /api/user
     Route::get('/user', [AuthController::class, 'getUser']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    
     // enpoint history saat user berhasil memesan atao booking 
-
 Route::get('/bookings/history', [MentoringController::class, 'history']);
 });
 

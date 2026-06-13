@@ -28,19 +28,31 @@ export enum ConsultationStatus {
   FAILED = "failed",
 }
 
+export interface ErrorResponse {
+  message: string;
+  status: string;
+  error: string;
+}
+
 export interface TypeUserApi {
   id?: number;
   username: string;
   email: string;
-  password: string;
+  role: string;
+}
+
+export interface GetUserData {
+  message: string;
+  status: string;
+  data: TypeUserApi;
 }
 
 // gunkna di login
 export interface TypeResponseUserLogin {
   status: string;
   message: string;
-  token: string;
-  user: TypeUserApi; // nantik ubah sesuikn dengan backend ajaj bgdar
+  token?: string;
+  data?: TypeUserApi; // nantik ubah sesuikn dengan backend ajaj bgdar
 }
 
 // gunkan di register dan profile
