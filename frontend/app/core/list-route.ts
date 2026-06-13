@@ -32,46 +32,48 @@ export const sidebarRouteMenu: MenuItem[] = [
         path: "/kelas/daftar",
         icon: RiBookOpenLine,
       },
-      {
-        title: "Booking Kelas",
-        path: "/kelas/booking",
-        icon: RiCalendarCheckLine,
-      },
       // {
-      //   title: "History Kelas",
-      //   path: "/kelas/history",
-      //   icon: RiHistoryLine,
-      // },
-    ],
-  },
-
-  {
-    title: "Konsultasi",
-    path: "/konsultasi",
-    icon: RiUserLine,
-    children: [
-      {
-        title: "Daftar Konsultasi",
-        path: "/konsultasi/daftar",
-        icon: RiBookOpenLine,
-      },
-      // {
-      //   title: "Booking Konsultasi",
-      //   path: "/konsultasi/bookingKonsultasi",
+      //   title: "Booking Kelas",
+      //   path: "/kelas/booking",
       //   icon: RiCalendarCheckLine,
       // },
       {
-        title: "History Konsultasi",
-        path: "/konsultasi/histori",
+        title: "History Kelas",
+        path: "/kelas/history",
         icon: RiHistoryLine,
       },
     ],
   },
 
+  // {
+  //   title: "Konsultasi",
+  //   path: "/konsultasi",
+  //   icon: RiUserLine,
+  //   children: [
+  // {
+  //   title: "Daftar Konsultasi",
+  //   path: "/konsultasi/daftar",
+  //   icon: RiBookOpenLine,
+  // },
+  // {
+  //   title: "Booking Konsultasi",
+  //   path: "/konsultasi/bookingKonsultasi",
+  //   icon: RiCalendarCheckLine,
+  // },
+  // {
+  //   title: "History Konsultasi",
+  //   path: "/konsultasi/histori",
+  //   icon: RiHistoryLine,
+  // },
+  //   ],
+  // },
+
   {
     title: "Payment",
     path: "/payment",
     icon: RiBankCardLine,
+
+    children: [{ title: "nt aja", path: "/calback", icon: RiBankCardLine }],
   },
 
   {

@@ -6,32 +6,37 @@
 
 ### Tech info
 
-#### Api
+- `php` : bahasan utama
+- `laravel` (versi 13) : framework utama untuk building web app
 
-```json
-{
-    "status": "success",
-    "message": "Riwayat booking berhasil didapatkan",
-    "data": [
-        {
-            "id": 12,
-            "student_id": 1,
-            "mentoring_id": 3,
-            "order_id": "TRX-1749000000-1",
-            "status": "paid",
-            "snap_token": "xxxx-xxxx-xxxx",
-            "created_at": "2026-06-12T12:00:00.000000Z",
-            "updated_at": "2026-06-12T12:05:00.000000Z",
-            "mentoring": {
-                "id": 3,
-                "title": "Bimbingan Intensif Aljabar Linear",
-                "description": "Persiapan ujian tengah semester",
-                "price": 150000,
-                "start_time": "2026-06-15 13:00:00",
-                "end_time": "2026-06-15 15:00:00",
-                "status": "available"
-            }
-        }
-    ]
-}
+### Declare Command
+
+##### execusi Feke data
+
+sudah ada di seeder , jadi cukup jalankan seeder nya
+
+```bash
+# jalkan seeder
+php artisan db:seed
+
+# buat bener bener baru , alias refersh
+php artisan migrate:fresh --seed
+```
+
+##### running for external
+
+```bash
+# jalkan spesifik untuk open Ip sendiri misalnya ip4 adlah = 192.168.1.10
+php artisan serve --host=192.168.1.10 --port=8000
+
+```
+
+##### test midrrant
+
+```bashcurl -X POST http://127.0.0.1:8000/api/booking/create \
+        -H "Accept: application/json" \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer 10|YRgIUfWQBaXPP7CJ5fGOew3KHEagxGHm3vNHSipO9fb685c7" \
+        -d '{"mentoring_id": 1}'
+
 ```

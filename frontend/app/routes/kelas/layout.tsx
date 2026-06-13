@@ -8,7 +8,7 @@ export default function KelasLayout() {
 
   return (
 
-    <div className=" flex flex-col md:flex-row">
+    <div className=" flex flex-col md:flex-row max-h-screen">
 
       <Sidebar />
 

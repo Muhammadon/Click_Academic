@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Booking;
 use App\Models\Mentoring;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MentoringController extends Controller
 {
@@ -23,25 +22,41 @@ class MentoringController extends Controller
     }
 
     // ambil dari booking
-public function history(Request $request) 
-{
-  
-    $studentId = $request->user()->id;
+/**
+     * Mengambil detail spesifik salah satu kelas bimbingan
+     */
+    public function show($id)
+    {
+        try {
+            // Mencari kelas berdasarkan ID menggunakan Query Builder agar aman dari Intelephense
+            $mentoring = Mentoring::query()->find($id);
 
-    // Ambil data booking milik mahasiswa tersebut beserta detail mentoringnya
-    // Diurutkan dari yang paling baru didaftarkan (latest)
-    $bookings = Booking::with('mentoring')
-        ->where('student_id', $studentId)
-        ->latest()
-        ->get();
+            // Cek jika ID kelas tidak ditemukan di database MySQL
+            if (!$mentoring) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Kelas mentoring yang Anda cari tidak ditemukan atau telah dihapus.'
+                ], 404);
+            }
 
-    // Kembalikan response JSON sukses ke Frontend
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Riwayat booking berhasil didapatkan',
-        'data' => $bookings
-    ], 200);
-}
+            // Kembalikan data lengkap satu kelas ke React
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Detail kelas berhasil dimuat',
+                'data' => $mentoring
+            ], 200);
+
+        } catch (\Exception $e) {
+            // Rekam error jika ada kendala koneksi internal database
+            Log::error('Get Detail Mentoring Error: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan internal pada server saat memuat detail kelas.'
+            ], 500);
+        }
+    }
+
 
 
 }

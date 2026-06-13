@@ -2,7 +2,7 @@ import { RiContactsBookUploadFill } from "@remixicon/react";
 
 export default function Konsultasi() {
   return (
-    <div className="relative h-full w-full overflow-hidden bg-putih-bersih">
+    <div className="relative h-full w-full  bg-putih-bersih">
       <div
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12]"
         style={{

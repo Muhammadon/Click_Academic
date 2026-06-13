@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            
+
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
-            // Baris di bawah ini yang diubah:
             $table->foreignId('mentoring_id')->constrained('mentorings')->onDelete('cascade');
-            
-            $table->string('order_id')->unique(); 
-            $table->enum('status', ['pending', 'paid', 'failed'])->default('pending'); 
-            $table->string('snap_token')->nullable(); 
-            
+
+            $table->string('order_id')->unique();
+            $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
+            $table->string('snap_token')->nullable();
+
             $table->timestamps();
         });
     }

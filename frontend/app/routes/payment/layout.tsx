@@ -3,19 +3,22 @@ import Sidebar from "~/component/sidebar";
 
 
 
-export function KonsultasiLayout() {
+
+export default function PaymentLayout() {
 
 
   return (
+
     <div className=" flex flex-col md:flex-row max-h-screen">
 
       <Sidebar />
-
 
       <main className="overflow-y-scroll overflow-x-hidden  w-full">
         <Outlet />
       </main>
 
-    </div>);
+    </div>
+
+  );
 
 }

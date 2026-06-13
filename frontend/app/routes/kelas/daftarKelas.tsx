@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { CardKelas } from "~/component/cardKelas";
 // import { CardKelas } from "~/component/cardKelas"; // nantik aja
 // import { exampleApiData } from "~/example/exampleApiData"; // gal pakai lagi
 
 // Import fungsi fetcher yang sudah kita perbaiki sebelumnya
 // Import interface sesuai struktur data yang Anda miliki
-import { GetApiData, Mentorings } from "~/core/Conections";
+import { GetApiData, Mentorings, SignIn } from "~/core/Conections";
 import type { Mentoring, MentoringListResponse } from "~/core/types";
 
 export default function ClassListPage() {
@@ -23,7 +24,7 @@ export default function ClassListPage() {
     if (!localToken) {
       console.info("token tidka ada");
       // Jika data tidak ada di localStorage, paksa redirect ke halaman signIn
-      navigate("/user/signIn");
+      navigate(SignIn);
     }
   }, [navigate]);
 
@@ -32,7 +33,7 @@ export default function ClassListPage() {
       setIsLoading(true);
       setErrorMessage(null);
       try {
-        // Menggunakan interface MentoringListResponse pada generic GetApiData
+        // Menggunakan interfmax-h-screenace MentoringListResponse pada generic GetApiData
         const response = await GetApiData<MentoringListResponse>(Mentorings);
 
         if (response.status === "success") {
@@ -199,49 +200,4 @@ export default function ClassListPage() {
   );
 }
 
-// Komponen CardKelas yang sudah disesuaikan dengan tema warna & interface Mentoring
-interface CardKelasProps {
-  item: Mentoring;
-}
 
-function CardKelas({ item }: CardKelasProps) {
-  // Format harga Rupiah
-  const formatRupiah = (value: number) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-    }).format(value);
-  };
-
-  return (
-    <div className="flex flex-col justify-between rounded-3xl border border-sage/20 bg-putih-bersih p-6 shadow-sm hover:shadow-md transition-all duration-300">
-      <div>
-        {/* Badge Kategori dummy sebagai penunjang visual */}
-        <span className="inline-block rounded-lg bg-mint-lembut px-3 py-1 text-xs font-semibold text-hijau-botol">
-          Academic Mentoring
-        </span>
-        <h4 className="mt-3 text-xl font-bold text-charcoal line-clamp-2">
-          {item.title}
-        </h4>
-        <p className="mt-2 text-sm text-dark-slate/70 line-clamp-3">
-          Ikuti bimbingan intensif materi kuliah untuk mendongkrak pemahaman
-          akademik Anda secara berkala.
-        </p>
-      </div>
-
-      <div className="mt-6">
-        <div className="flex items-baseline gap-1 mb-4">
-          <span className="text-xs text-dark-slate/60">Investasi:</span>
-          <span className="text-2xl font-black text-hijau-zamrud">
-            {formatRupiah(item.price)}
-          </span>
-        </div>
-
-        <button className="w-full rounded-2xl bg-hijau-botol py-3.5 text-center font-bold text-putih-bersih transition-all duration-300 hover:bg-hijau-uin hover:shadow-lg">
-          Daftar Kelas
-        </button>
-      </div>
-    </div>
-  );
-}

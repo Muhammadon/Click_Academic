@@ -7,8 +7,9 @@ export const SignIn = PATHSERVER + "/login";
 export const SignUp = PATHSERVER + "/register";
 export const User = PATHSERVER + "/user";
 export const Mentorings = PATHSERVER + "/mentorings";
-export const History = PATHSERVER + "/histori";
-export const Bookings = PATHSERVER + "/bookings";
+export const BookingHistory = PATHSERVER + "/booking/history";
+
+export const BookingCreate = PATHSERVER + "/booking/create";
 
 // di sini saya menguunakan Generic agar sesui dengan typenya nantik
 
@@ -51,7 +52,7 @@ export async function sendPostData<Type>(
         "Content-Type": "application/json",
         Accept: "application/json",
         // Biasanya Laravel Passport/Sanctum membutuhkan prefix 'Bearer '
-        Authorization: token ? `Bearer ${token}` : "",
+        Authorization: token ? `Bearer ${JSON.parse(token)}` : "",
       },
       body: JSON.stringify(data),
     });

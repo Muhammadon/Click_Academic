@@ -27,6 +27,7 @@ export default function Sidebar() {
           md:flex
           flex-col
           w-72
+          h-screen
           bg-white
           border-r
           border-gray-200
@@ -136,7 +137,7 @@ export default function Sidebar() {
 
       <nav className="md:hidden sticky top-0 z-50 h-16 border-b border-gray-200 bg-white w-full">
 
-        <div className="flex  px-2 py-2 gap-2 h-full items-center touch-pan-x">
+        <div className="flex  justify-between px-2 py-2 gap-2 h-full items-center touch-pan-x">
 
 
           {sidebarRouteMenu.map((menu: MenuItem) => {

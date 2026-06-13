@@ -21,7 +21,7 @@ export function meta({}: Route.MetaArgs) {
 export default function SignInPage() {
   const redirect = useNavigate();
 
-  const [formData, setFormData] = useState<TypeUserApi>({
+  const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
@@ -57,14 +57,18 @@ export default function SignInPage() {
           (response as any).status === "success")
       ) {
         setIsSuccess(true);
-        setMessage("Login Berhasil! Mengalihkan ke dashboard...");
+        setMessage(response.message);
+        setTimeout(()=>{
+          setMessage("Login Berhasil! Mengalihkan ke dashboard...");
 
-        // Simpan data user login ke localStorage
-        localStorage.setItem("user_token", JSON.stringify(response.token));
+          // Simpan data user login ke localStorage
+          localStorage.setItem("user_token", JSON.stringify(response.token));
 
-        setTimeout(() => {
-          redirect("/user/");
-        }, 3000);
+          setTimeout(() => {
+            redirect("/user/");
+          }, 3000);
+
+        },1500)
       } else {
         setIsSuccess(false);
         console.info("execusis :", response.message);

@@ -31,6 +31,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+
+
+        {/* midtrant */}
+        <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="YOUR_SNAP_CLIENT_KEY"></script>
       </head>
       <body>
         {children}

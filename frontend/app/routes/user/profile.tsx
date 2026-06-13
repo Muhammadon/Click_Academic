@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { User as userPath } from "~/core/Conections";
+import CardMentoring from "~/component/cardMentoring";
 import {
   RiMailLine,
   RiPhoneLine,
@@ -18,6 +19,7 @@ export default function User() {
   const [userData, setUserData] = useState<GetUserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
     const localToken = localStorage.getItem("user_token");
 
@@ -30,7 +32,7 @@ export default function User() {
         return; // Stop eksekusi kode di bawahnya
       }
 
-      // 2. Jika token ada, ambil data dari API Laravel
+      // Jika token ada, ambil data dari API Laravel
       try {
         const response = await GetApiData<GetUserData>(userPath, {
           method: "GET",
@@ -65,144 +67,164 @@ export default function User() {
 
     <div className="flex flex-col md:flex-row">
 
-<Sidebar/>
+      <Sidebar />
 
-    <div className="h-full w-full bg-mint-lembut overflow-y-scroll overflow-x-hidden">
-      <section className="relative">
-        <div className="h-52 md:h-72 bg-[var(--color-hijau-uin)]" />
+      <div className="h-full w-full bg-mint-lembut max-h-screen overflow-y-scroll overflow-x-hidden">
+        <section className="relative">
+          <div className="h-52 md:h-72 bg-[var(--color-hijau-uin)]" />
 
-        <div className="absolute left-1/2 -bottom-16 -translate-x-1/2 md:left-16 md:translate-x-0">
-          <div className="h-32 w-32 md:h-40 md:w-40 rounded-full border-4 border-[var(--color-kuning-emas)] bg-[var(--color-pale-eucalyptus)] overflow-hidden shadow-lg">
-            <img
-              src="/profile.jpg"
-              alt="Profile"
-              className="h-full w-full object-cover"
-              onError={(e) => {
-                // Fallback avatar jika gambar lokal /profile.jpg tidak ditemukan
-                e.currentTarget.src = `https://ui-avatars.com/api/?name=${userData.data.username}&background=0D9488&color=fff`;
-              }}
-            />
-          </div>
-        </div>
-      </section>
-
-      <main className="pt-20 md:pt-24 px-4 md:px-8 max-w-7xl mx-auto">
-        <section className="text-center md:text-left mb-8">
-          {/* Mengambil nilai nama/username dinamis dari Laravel */}
-          <h1 className="text-3xl font-bold text-[var(--color-charcoal)] capitalize">
-            {userData.data.username}
-          </h1>
-
-          <p className="text-[var(--color-dark-slate)] mt-2 uppercase text-xs font-bold tracking-wider bg-[var(--color-pale-eucalyptus)] inline-block px-3 py-1 rounded-full text-[var(--color-hijau-botol)]">
-            Hak Akses: {userData.data.role}
-          </p>
-
-          <div className="mt-4 flex justify-center md:justify-start gap-3">
-            <button className="px-5 py-2 rounded-lg bg-[var(--color-hijau-zamrud)] text-white font-medium hover:opacity-90 transition text-sm shadow-sm">
-              Edit Profile
-            </button>
-            <button
-              // onClick={() => {
-              //   localStorage.removeItem("user_data");
-              //   navigate("/user/signIn");
-              // }}
-              className="px-5 py-2 rounded-lg bg-rose-600 text-white font-medium hover:bg-rose-700 transition text-sm shadow-sm"
-            >
-              Sign Out
-            </button>
+          <div className="absolute left-1/2 -bottom-16 -translate-x-1/2 md:left-16 md:translate-x-0">
+            <div className="h-32 w-32 md:h-40 md:w-40 rounded-full border-4 border-[var(--color-kuning-emas)] bg-[var(--color-pale-eucalyptus)] overflow-hidden shadow-lg">
+              <img
+                src="/profile.jpg"
+                alt="Profile"
+                className="h-full w-full object-cover"
+                onError={(e) => {
+                  // Fallback avatar jika gambar lokal /profile.jpg tidak ditemukan
+                  e.currentTarget.src = `https://ui-avatars.com/api/?name=${userData.data.username}&background=0D9488&color=fff`;
+                }}
+              />
+            </div>
           </div>
         </section>
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Card Informasi Profil */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-6 text-[var(--color-charcoal)]">
-              Informasi Profil
-            </h2>
+        <main className="pt-20 md:pt-24 px-4 md:px-8 max-w-7xl mx-auto">
+          <section className="text-center md:text-left mb-8">
+            {/* Mengambil nilai nama/username dinamis dari Laravel */}
+            <h1 className="text-3xl font-bold text-[var(--color-charcoal)] capitalize">
+              {userData.data.username}
+            </h1>
 
-            <div className="space-y-5">
-              <div className="flex items-center gap-3 text-sm text-[var(--color-dark-slate)]">
-                <RiMailLine
-                  size={20}
-                  className="text-[var(--color-toska-tua)] shrink-0"
-                />
-                <span>{userData.data.email}</span>
+            <p className="text-[var(--color-dark-slate)] mt-2 uppercase text-xs font-bold tracking-wider bg-[var(--color-pale-eucalyptus)] inline-block px-3 py-1 rounded-full text-[var(--color-hijau-botol)]">
+              Hak Akses: {userData.data.role}
+            </p>
+
+            <div className="mt-4 flex justify-center md:justify-start gap-3">
+              <button className="px-5 py-2 rounded-lg bg-[var(--color-hijau-zamrud)] text-white font-medium hover:opacity-90 transition text-sm shadow-sm">
+                Edit Profile
+              </button>
+              <button
+                // onClick={() => {
+                //   localStorage.removeItem("user_data");
+                //   navigate("/user/signIn");
+                // }}
+                className="px-5 py-2 rounded-lg bg-rose-600 text-white font-medium hover:bg-rose-700 transition text-sm shadow-sm"
+              >
+                Sign Out
+              </button>
+            </div>
+          </section>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* Card Informasi Profil */}
+            <div className="bg-white rounded-2xl shadow-md p-6">
+              <h2 className="text-xl font-semibold mb-6 text-[var(--color-charcoal)]">
+                Informasi Profil
+              </h2>
+
+              <div className="space-y-5">
+                <div className="flex items-center gap-3 text-sm text-[var(--color-dark-slate)]">
+                  <RiMailLine
+                    size={20}
+                    className="text-[var(--color-toska-tua)] shrink-0"
+                  />
+                  <span>{userData.data.email}</span>
+                </div>
+
+                <div className="flex items-center gap-3 text-sm text-[var(--color-dark-slate)]">
+                  <RiPhoneLine
+                    size={20}
+                    className="text-[var(--color-toska-tua)] shrink-0"
+                  />
+                  <span>+62 812 3456 7890</span>
+                </div>
+
+                <div className="flex items-center gap-3 text-sm text-[var(--color-dark-slate)]">
+                  <RiMapPinLine
+                    size={20}
+                    className="text-[var(--color-toska-tua)] shrink-0"
+                  />
+                  <span>Banda Aceh, Indonesia</span>
+                </div>
               </div>
+            </div>
 
-              <div className="flex items-center gap-3 text-sm text-[var(--color-dark-slate)]">
-                <RiPhoneLine
-                  size={20}
-                  className="text-[var(--color-toska-tua)] shrink-0"
-                />
-                <span>+62 812 3456 7890</span>
-              </div>
+            {/* Card Statistik */}
+            <div className="bg-white rounded-2xl shadow-md p-6">
+              <h2 className="text-xl font-semibold mb-6 text-[var(--color-charcoal)]">
+                Statistik & Sistem
+              </h2>
 
-              <div className="flex items-center gap-3 text-sm text-[var(--color-dark-slate)]">
-                <RiMapPinLine
-                  size={20}
-                  className="text-[var(--color-toska-tua)] shrink-0"
-                />
-                <span>Banda Aceh, Indonesia</span>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Box Kursus Aktif */}
+                <div className="rounded-xl bg-[var(--color-champagne)] p-5 border border-[var(--color-soft-ochre)]/20">
+                  <RiBookLine
+                    size={28}
+                    className="mb-3 text-[var(--color-olive)]"
+                  />
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-tight">
+                    Kursus Diikuti
+                  </p>
+                  <h3 className="text-2xl font-black mt-1 text-[var(--color-charcoal)]">
+                    {userData.data.mentorings?.length}
+                  </h3>
+                </div>
+
+                {/* BOX ROLE TAMBAHAN DI BAGIAN KURSUS STATISTIK */}
+                <div className="rounded-xl bg-mint-lembut p-5 border border-[var(--color-sage)]/30">
+                  <RiShieldUserLine
+                    size={28}
+                    className="mb-3 text-[var(--color-hijau-botol)]"
+                  />
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-tight">
+                    Sistem Role
+                  </p>
+                  <h3 className="text-lg font-extrabold mt-2 text-[var(--color-hijau-botol)] capitalize truncate">
+                    {userData.data.role}
+                  </h3>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Card Statistik */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-6 text-[var(--color-charcoal)]">
-              Statistik & Sistem
+          {/* Tentang Saya */}
+          <section className="mt-6 bg-white rounded-2xl shadow-md p-6 mb-12">
+            <h2 className="text-xl font-semibold mb-4 text-[var(--color-charcoal)]">
+              Tentang Saya
             </h2>
 
-            <div className="grid grid-cols-2 gap-4">
-              {/* Box Kursus Aktif */}
-              <div className="rounded-xl bg-[var(--color-champagne)] p-5 border border-[var(--color-soft-ochre)]/20">
-                <RiBookLine
-                  size={28}
-                  className="mb-3 text-[var(--color-olive)]"
-                />
-                <p className="text-xs font-bold text-gray-500 uppercase tracking-tight">
-                  Kursus Diikuti
-                </p>
-                <h3 className="text-2xl font-black mt-1 text-[var(--color-charcoal)]">
-                  12
-                </h3>
-              </div>
-
-              {/* BOX ROLE TAMBAHAN DI BAGIAN KURSUS STATISTIK */}
-              <div className="rounded-xl bg-mint-lembut p-5 border border-[var(--color-sage)]/30">
-                <RiShieldUserLine
-                  size={28}
-                  className="mb-3 text-[var(--color-hijau-botol)]"
-                />
-                <p className="text-xs font-bold text-gray-500 uppercase tracking-tight">
-                  Sistem Role
-                </p>
-                <h3 className="text-lg font-extrabold mt-2 text-[var(--color-hijau-botol)] capitalize truncate">
-                  {userData.data.role}
-                </h3>
-              </div>
+            <p className="leading-7 text-[var(--color-dark-slate)] text-sm">
+              Saya adalah pengguna terdaftar pada Platform Konsultasi Akademik
+              dengan hak akses sebagai{" "}
+              <strong className="text-[var(--color-hijau-botol)] capitalize">
+                {userData.data.role}
+              </strong>
+              . Fokus mengelola pemesanan kelas pelatihan, mentoring, serta
+              administrasi konsultasi online secara digital.
+            </p>
+          </section>
+          <h1 className="text-black">pindahin ke halaman booking anntik</h1>
+          {isLoading ? (
+            <div className="mt-4 h-24 bg-mint-lembut/30 animate-pulse rounded-2xl" />
+          ) : !userData?.data?.mentorings || userData?.data?.mentorings?.length === 0 ? (
+            // DITAMBAHKAN .data SEBELUM .mentorings
+            <div className="mt-6 text-center py-8 border border-dashed border-sage/30 rounded-2xl text-dark-slate/40 text-sm mb-12">
+              📭 Anda belum memiliki kelas yang sudah di-booking aktif.
             </div>
-          </div>
-        </div>
-
-        {/* Tentang Saya */}
-        <section className="mt-6 bg-white rounded-2xl shadow-md p-6 mb-12">
-          <h2 className="text-xl font-semibold mb-4 text-[var(--color-charcoal)]">
-            Tentang Saya
-          </h2>
-
-          <p className="leading-7 text-[var(--color-dark-slate)] text-sm">
-            Saya adalah pengguna terdaftar pada Platform Konsultasi Akademik
-            dengan hak akses sebagai{" "}
-            <strong className="text-[var(--color-hijau-botol)] capitalize">
-              {userData.data.role}
-            </strong>
-            . Fokus mengelola pemesanan kelas pelatihan, mentoring, serta
-            administrasi konsultasi online secara digital.
-          </p>
-        </section>
-      </main>
-    </div>
-    </div>
+          ) : (
+            <section className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+              {/* JALUR MAP DIGANTI MENJADI userData?.data?.mentorings */}
+              {userData?.data?.mentorings?.map((kelas) => (
+                <CardMentoring
+                  key={kelas.id}
+                  item={kelas}
+                  onViewDetail={(id) => console.log("Buka ruang kelas ID:", id)}
+                />
+              ))}
+            </section>
+          )}
+        </main>
+      </div>
+    </div >
   );
 }

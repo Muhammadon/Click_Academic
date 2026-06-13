@@ -50,7 +50,7 @@ class AuthController extends Controller
             ], 201);
         } catch (\Exception $e) {
             // 1. Catat error asli SQLSTATE ke dalam file log internal server (storage/logs/laravel.log)
-            Log::error('Gagal Registrasi User: '.$e->getMessage());
+            Log::error('Gagal Registrasi User: ' . $e->getMessage());
 
             // Kembalikan pesan yang aman dan sopan ke Client (React)
             return response()->json([
@@ -58,7 +58,6 @@ class AuthController extends Controller
                 'message' => 'Terjadi kesalahan internal pada server database. Silakan hubungi admin.',
             ], 500); // Gunakan status 500 Internal Server Error
         }
-
     }
 
     // Fungsi untuk masuk dan mendapatkan Token
@@ -75,7 +74,6 @@ class AuthController extends Controller
             $user = User::query()->where('email', $request->email)->first();
             // Cek apakah user ditemukan dan password-nya cocok
             if (! $user || ! Hash::check($request->password, $user->password)) {
-                // Mengembalikan format error yang bersih tanpa properti kosong yang membingungkan
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Email atau password yang Anda masukkan salah.',
@@ -87,19 +85,18 @@ class AuthController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'berhasil membuat data user',
+                'message' => 'Selamat datang' . $user->username . "ke Clieck Academic",
                 'token' => $token,
-                'user' => [
+                'data' => [
                     'id' => $user->id,
                     'username' => $user->username, // Disesuaikan dengan nama kolom database Anda yang baru ('username')
                     'email' => $user->email,
                     'role' => $user->role, // Wajib dikirim agar widget Kursus/Statistik di React tidak kosong
                 ],
             ], 200);
-
         } catch (\Exception $e) {
             // Catat error sistem/database asli ke log internal server (storage/logs/laravel.log)
-            Log::error('Login Fatal Error: '.$e->getMessage());
+            Log::error('Login Fatal Error: ' . $e->getMessage());
 
             // Kembalikan response aman ke client jika terjadi kegagalan server
             return response()->json([
@@ -113,24 +110,43 @@ class AuthController extends Controller
     public function getUser(Request $request)
     {
         // Mengambil data user yang sedang login melalui token auth
-        $user = $request->user();
+        $currentUser = $request->user();
 
         // Jika user tidak ditemukan (opsional, sebagai antisipasi jika middleware lolos)
-        if (! $user) {
+        if (! $currentUser) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'User tidak terautentikasi',
             ], 401);
         }
 
+
+        // Tarik data user beserta relasi tabel mentorings melalu pivot bookings
+        $userWithMentorings = User::query()
+            ->with(['mentorings' => function ($query) {
+                $query->orderBy('bookings.created_at', 'desc');
+            }])
+            ->find($currentUser->id);
+
+        //RE-MAPPING: Paksa formatnya murni mengikuti skema tabel mentorings asli (Mentoring[])
+        if (! $userWithMentorings) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Profil pengguna gagal dimuat ',
+            ], 404);
+        }
+
+
+
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data user berhasil didapatkan',
             'data' => [
-                'id' => $user->id,
-                'username' => $user->username, // Disesuaikan dengan field name di DB Anda
-                'email' => $user->email,
-                'role' => $user->role,
+                'id' => $currentUser->id,
+                'username' => $currentUser->username, // Disesuaikan dengan field name di DB Anda
+                'email' => $currentUser->email,
+                'role' => $currentUser->role,
             ],
         ], 200);
     }
@@ -161,10 +177,9 @@ class AuthController extends Controller
                 'status' => 'success',
                 'message' => 'Logout berhasil, token telah dihapus',
             ], 200);
-
         } catch (\Exception $e) {
             // Catat error jika terjadi kendala server
-            Log::error('Logout Error: '.$e->getMessage());
+            Log::error('Logout Error: ' . $e->getMessage());
 
             return response()->json([
                 'status' => 'error',

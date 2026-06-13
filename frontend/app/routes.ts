@@ -17,16 +17,22 @@ export default [
   route("kelas", "./routes/kelas/layout.tsx", [
     index("./routes/kelas/kelas.tsx"),
     route("daftar", "./routes/kelas/daftarKelas.tsx"),
-    // route("history", "./routes/kelas/historyKelas.tsx"),
-    route("booking", "./routes/kelas/bookingKelas.tsx"),
+    route("history", "./routes/kelas/historyKelas.tsx"),
+
+    route("detail/:id", "./routes/kelas/detailBooking.tsx"),
   ]),
 
   // konsultasi
   route("konsultasi", "./routes/konsultasi/layout.tsx", [
     index("./routes/konsultasi/konsultasi.tsx"),
     // route("daftar", "./routes/kelas/daftarKelas.tsx"),
-    route("histori", "./routes/kelas/historyKelas.tsx"), // history 1 aja
+    // route("histori", "./routes/kelas/historyKelas.tsx"), // history 1 aja
     // route("booking", "./routes/kelas/bookingKelas.tsx"),
+  ]),
+
+  // payment
+  route("payment", "./routes/payment/layout.tsx", [
+    index("./routes/payment/payment.tsx"),
   ]),
 
   // halamn hotfound paling bawah
