@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -136,32 +137,35 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Tarik data user beserta relasi tabel mentorings melalu pivot bookings
-        $userWithMentorings = User::query()
-            ->with(['mentorings' => function ($query) {
-                $query->orderBy('bookings.created_at', 'desc');
-            }])
-            ->find($currentUser->id);
+        try {
+            // harus di definisikan dulu di model User
+            //$total_kelas = $request->user()->bookings()->where('status', 'paid')->count();
+            $total_kelas = Booking::query()
+                ->where('student_id', $currentUser->id)
+                ->where('status', 'paid')
+                ->count();
 
-        //RE-MAPPING: Paksa formatnya murni mengikuti skema tabel mentorings asli (Mentoring[])
-        if (! $userWithMentorings) {
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data user berhasil login',
+                'total_kelas' => $total_kelas,
+                'data' => [
+                    'id' => $currentUser->id,
+                    'username' => $currentUser->username, // Disesuaikan dengan field name di DB Anda
+                    'email' => $currentUser->email,
+                    'role' => $currentUser->role,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            // Catat error aslinya ke log agar bisa Anda baca di storage/logs/laravel.log
+            Log::error('Get User Profile Error: ' . $e->getMessage());
+
             return response()->json([
                 'status' => 'error',
-                'message' => 'Profil pengguna gagal dimuat ',
-                'data' => [],
-            ], 404);
+                'message' => 'Terjadi kesalahan pada server saat memuat profil.',
+            ], 500);
         }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data user berhasil login',
-            'data' => [
-                'id' => $currentUser->id,
-                'username' => $currentUser->username, // Disesuaikan dengan field name di DB Anda
-                'email' => $currentUser->email,
-                'role' => $currentUser->role,
-            ],
-        ], 200);
     }
 
     public function logout(Request $request)

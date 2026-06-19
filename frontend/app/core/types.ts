@@ -45,6 +45,9 @@ export interface GetUserData {
   message: string;
   status: string;
   data: TypeUserApi;
+
+  // data lain yang di butuhkan 
+  total_kelas : number;
 }
 
 // gunkna di login

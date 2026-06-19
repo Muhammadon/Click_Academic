@@ -91,9 +91,9 @@ class BookingController extends Controller
                     ]
                 ],
                 ['callbacks' => [
-                    'finish'   => $frontendUrl . '/user/payment/history?status#success',
-                    'unfinish' => $frontendUrl . '/user/payment/history?status#pending',
-                    'error'    => $frontendUrl . '/user/payment/history?status#error'
+                    'finish'   => $frontendUrl . '/mentorings/history#success',
+                    'unfinish' => $frontendUrl . '/mentorings/history#pending',
+                    'error'    => $frontendUrl . '/mentorings/history#error'
                 ]]
 
             ];
@@ -211,49 +211,37 @@ class BookingController extends Controller
         }
 
         try {
-            // EAGER LOADING: Tarik data bookings beserta relasi mentoring-nya
+            // Ambil data murni dari tabel bookings saja
             $bookings = Booking::query()
-                ->with(['mentoring'])
                 ->where('student_id', $currentUser->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
 
-            // Pemetaan struktur data (Data Mapping)
+            // Pemetaan data murni tanpa properti relasi
             $formattedBookingList = $bookings->map(function ($booking) {
                 return [
                     'id'           => (int) $booking->id,
                     'student_id'   => (int) $booking->student_id,
                     'mentoring_id' => (int) $booking->mentoring_id,
                     'order_id'     => $booking->order_id,
-                    'status'       => $booking->status, // Mengembalikan 'pending', 'paid', atau 'failed'
+                    'status'       => $booking->status, // 'pending', 'paid', atau 'failed'
                     'snap_token'   => $booking->snap_token,
                     'created_at'   => $booking->created_at ? $booking->created_at->toISOString() : null,
                     'updated_at'   => $booking->updated_at ? $booking->updated_at->toISOString() : null,
-
-                    // Nested object mentoring nempel di dalam objek booking
-                    'mentoring'    => $booking->mentoring ? [
-                        'id'          => (int) $booking->mentoring->id,
-                        'title'       => $booking->mentoring->title ?? '',
-                        'description' => $booking->mentoring->description,
-                        'price'       => (int) ($booking->mentoring->price ?? 0),
-                        'start_time'  => $booking->mentoring->start_time,
-                        'end_time'    => $booking->mentoring->end_time,
-                        'status'      => $booking->mentoring->status ?? 'available',
-                    ] : null,
                 ];
             })->all();
 
             return response()->json([
-                'status'   => 'success',
-                'message'  => 'Riwayat transaksi berhasil dimuat.',
-                'data'  => $formattedBookingList
+                'status'  => 'success',
+                'message' => 'Riwayat transaksi berhasil dimuat.',
+                'data'    => $formattedBookingList
             ], 200);
         } catch (\Exception $e) {
             Log::error('BookingController history Error: ' . $e->getMessage());
 
             return response()->json([
                 'status'  => 'error',
-                'message' => 'Gagal memuat riwayat pendaftaran kelas bimbingan.',
+                'message' => 'Gagal memuat riwayat pendaftaran.',
             ], 500);
         }
     }

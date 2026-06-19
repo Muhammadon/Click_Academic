@@ -7,7 +7,7 @@ import {
   RiInformationLine
 } from "@remixicon/react";
 import type { CreateBookingResponse, DetailMentoringResponse, Mentoring } from "~/core/types";
-import { BookingCreate, GetApiData, Mentorings, sendPostData } from "~/core/Conections";
+import { BookingCreate, GetApiData, Mentorings, MentoringsHistory, sendPostData } from "~/core/Conections";
 import { useNavigate, useParams } from "react-router";
 
 export default function DetailBooking() {
@@ -130,11 +130,11 @@ export default function DetailBooking() {
         (window as any).snap.pay(response.snap_token, {
           onSuccess: (result: any) => {
             console.info("Pembayaran Sukses:", result);
-            navigate("/user/payment/history?status=success");
+            navigate(MentoringsHistory + "#success");
           },
           onPending: (result: any) => {
             console.info("Pembayaran Pending/Menunggu:", result);
-            navigate("/user/payment/history?status=pending");
+            navigate(MentoringsHistory +"#pending");
           },
           onError: (result: any) => {
             console.error("Pembayaran Gagal:", result);
@@ -162,7 +162,7 @@ export default function DetailBooking() {
 };
 
   return (
-    <div className="min-h-screen bg-linier-to-b from-mint-lembut via-white to-mint-lembut/30 pb-20">
+    <div className="min-h-screen bg-linier-to-b pb-20 bg-mint-lembut">
       {/* Top Sticky Header */}
       <header className="sticky top-0 z-50 border-b border-sage/20 bg-white/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-6 py-4">

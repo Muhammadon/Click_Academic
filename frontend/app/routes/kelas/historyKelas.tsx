@@ -1,8 +1,10 @@
+// KELAS DI SINI ADA DARI MENTORING DI BACKEENT
+
 import { RiArrowLeftLine, RiBookOpenLine } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { useNavigate } from "react-router";
-import { MentoringsHistory, sendPostData } from "~/core/Conections";
+import { GetApiData, MentoringsHistory, sendPostData } from "~/core/Conections";
 import type { Mentoring, MentoringListResponse } from "~/core/types";
 
 
@@ -27,26 +29,41 @@ export default function KelasHistory() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorText, setErrorText] = useState<string | null>(null);
 
-
-  // Ambil parameter status dari URL redirect Midtrans (?status=success/pending/error)
-  // const queryParams = new URLSearchParams(location.search);
-  // const paymentStatusAlert = queryParams.get("status");
-
   useEffect(() => {
-    const token = localStorage.getItem("user_token") || ""; 
+    // 1. Ambil token dari localStorage
+    const localToken = localStorage.getItem("user_token"); 
+    
     const fetchBookingHistory = async () => {
       setIsLoading(true);
       setErrorText(null);
+      
+      // Jika token tidak ditemukan, langsung tendang ke Sign In
+      if (!localToken) {
+        setErrorText("Sesi Anda habis. Silakan login kembali.");
+        setIsLoading(false);
+        navigate("/user/signIn");
+        return;
+      }
+
       try {
-        // Ambil data langsung menggunakan interface MentoringListResponse
-        const response = await sendPostData<MentoringListResponse>(
+        // Parsing token jika disimpan menggunakan JSON.stringify sebelumnya
+        const cleanToken = localToken.startsWith('"') ? JSON.parse(localToken) : localToken;
+
+        // 3. Kirim request GET disertai dengan Headers Authorization Bearer Token
+        const response = await GetApiData<MentoringListResponse>(
           MentoringsHistory, 
-          {}, 
-          token
+          {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${cleanToken}`,
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+          }
         );
 
-        if (response.status === "success") {
-          // Masuk ke root key 'data' sesuai struktur backend Anda
+        if (response && response.status === "success") {
+          // Masuk ke root key 'data' murni (Mentoring[]) sesuai skema backend Anda
           setMentoringsList(response.data); 
         } else {
           setErrorText(response.message || "Gagal memuat histori bimbingan.");
@@ -60,7 +77,7 @@ export default function KelasHistory() {
     };
 
     fetchBookingHistory();
-  }, []);
+  }, [navigate]);
 
   const formatRupiah = (angka: number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -70,7 +87,7 @@ export default function KelasHistory() {
     }).format(angka);
   };
 
- return (
+  return (
     <div className="min-h-screen bg-mint-lembut">
       <header className="sticky top-0 z-50 border-b border-sage/20 bg-putih-bersih/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
@@ -83,7 +100,7 @@ export default function KelasHistory() {
             </button>
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-sage/30 bg-mint-lembut px-3 py-1 text-xs font-bold text-hijau-botol">
-                Riwayat Transaksi Kelas
+                Riwayat Kelas Anda
               </div>
             </div>
           </div>
@@ -94,10 +111,8 @@ export default function KelasHistory() {
         </div>
       </header>
 
-      {/* UTAMA: SATU TAMPILAN ALL HISTORY */}
       <main className="mx-auto max-w-7xl px-6 pb-24 lg:px-10 mt-8">
         
-        {/* JUDUL HALAMAN */}
         <div className="mb-6">
           <h3 className="text-2xl font-black text-charcoal">Semua Riwayat Kelas</h3>
           <p className="text-xs text-dark-slate/50 mt-1">
@@ -105,7 +120,6 @@ export default function KelasHistory() {
           </p>
         </div>
 
-        {/* HANDLING ERROR JIKA ADA */}
         {errorText && (
           <div className="text-center text-rose-600 bg-white border border-rose-200 p-6 rounded-3xl shadow-sm mb-6">
             ⚠️ {errorText}
@@ -123,7 +137,7 @@ export default function KelasHistory() {
             📭 Anda belum memiliki riwayat pendaftaran kelas bimbingan apa pun.
           </div>
         ) : (
-          /* GRID SATU TAMPILAN GABUNGAN */
+          /* GRID DATA BERHASIL DI-LOAD */
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {mentoringsList.map((kelas) => (
               <div 
@@ -133,7 +147,6 @@ export default function KelasHistory() {
                 <div>
                   <div className="flex justify-between items-start gap-4">
                     <h4 className="font-bold text-base text-charcoal line-clamp-1">{kelas.title}</h4>
-                    {/* Badge kuota kelas */}
                     <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
                       kelas.status === 'available' 
                         ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
@@ -153,13 +166,14 @@ export default function KelasHistory() {
                     <span className="text-sm font-black text-hijau-botol">{formatRupiah(kelas.price)}</span>
                   </div>
                   
-                  <button 
+                  {/* nantik aja<button 
                     onClick={() => navigate(`/kelas/booking/${kelas.id}`)}
                     className="flex items-center gap-1.5 text-xs bg-dark-slate hover:bg-charcoal text-white font-bold px-4 py-2.5 rounded-xl transition-all"
                   >
                     <RiBookOpenLine size={14} />
                     Lihat Detail
                   </button>
+                  */}
                 </div>
               </div>
             ))}
@@ -167,5 +181,5 @@ export default function KelasHistory() {
         )}
       </main>
     </div>
- );
+  );
 }

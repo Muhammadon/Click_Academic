@@ -206,7 +206,7 @@ export default function SignUpPage() {
 
                 <button
                   type="submit"
-                  className="w-full mt-4 cursor-pointer rounded-2xl bg-linier-to-r from-deep-teal to-hijau-botol px-5 py-4 font-bold text-putih-bersih transition-all duration-300 hover:opacity-90 shadow-lg"
+                  className="w-full mt-4 cursor-pointer rounded-2xl bg-hijau-uin hover:bg-hijau-botol text-putih-bersih px-5 py-4 font-bold transition-all duration-300 hover:opacity-90 shadow-lg"
                 >
                   Daftar Sekarang
                 </button>

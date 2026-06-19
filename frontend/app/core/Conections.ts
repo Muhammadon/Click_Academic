@@ -5,9 +5,10 @@ export const PATHSERVER: string = "http://127.0.0.1:8000/api";
 
 export const SignIn = PATHSERVER + "/login";
 export const SignUp = PATHSERVER + "/register";
+export const SignOut = PATHSERVER + "/logout";
 export const User = PATHSERVER + "/user";
 export const Mentorings = PATHSERVER + "/mentorings";
-export const MentoringsHistory = PATHSERVER + "/history"; 
+export const MentoringsHistory = PATHSERVER + "/mentorings/history";
 export const BookingHistory = PATHSERVER + "/booking/history";
 
 export const BookingCreate = PATHSERVER + "/booking/create";

@@ -3,6 +3,7 @@
 import { sidebarRouteMenu, type MenuItem } from "~/core/list-route";
 import { Link, useLocation } from "react-router";
 import { useState } from "react";
+import { RiGraduationCapLine } from "@remixicon/react";
 export default function Sidebar() {
   const location = useLocation();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -30,9 +31,39 @@ export default function Sidebar() {
           h-screen
           bg-white
           border-r
-          border-gray-200
+          border-gray-300
         "
       >
+
+{/* Header Branding Akademik */}
+  <div
+    className="
+      h-20
+      flex
+      items-center
+      px-6
+      gap-1
+      border-b
+      border-gray-100
+    "
+  >
+ 
+      {/* Wrapper Icon dengan dekorasi background */}
+      <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-hijau-uin group-hover:bg-hijau-uin group-hover:text-white transition-all duration-300 shadow-sm border border-green-100">
+        <RiGraduationCapLine size={22} className="animate-pulse" />
+      </div>
+
+      {/* Teks Branding */}
+      <div className="flex flex-col">
+        <span className="text-xl font-extrabold tracking-tight text-gray-900 flex items-center gap-1">
+          Click 
+        </span>
+        <span className="text-xs font-semibold text-gray-400 tracking-wider uppercase">
+          Akademik 
+        </span>
+      </div>
+  </div>
+
         {/*   <div
           className="
             h-16
