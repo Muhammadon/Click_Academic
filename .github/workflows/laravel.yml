@@ -17,6 +17,32 @@ jobs:
       run:
         working-directory: backend
 
+    services:
+
+      mysql:
+
+        image: mysql:8.0
+
+        env:
+
+          MYSQL_ROOT_PASSWORD: root
+
+          MYSQL_DATABASE: click_academic
+
+        ports:
+
+          - 3306:3306
+
+        options: >-
+
+          --health-cmd="mysqladmin ping -h localhost -proot"
+
+          --health-interval=10s
+
+          --health-timeout=5s
+
+          --health-retries=5
+
     steps:
 
       - uses: actions/checkout@v4
@@ -29,7 +55,7 @@ jobs:
 
           php-version: 8.4
 
-          extensions: mbstring, pdo_sqlite
+          extensions: mbstring, pdo_mysql
 
       - name: Copy .env
 
@@ -43,21 +69,26 @@ jobs:
 
         run: php artisan key:generate
 
-      - name: Create SQLite Database
-
-        run: |
-
-          mkdir -p database
-
-          touch database/database.sqlite
-
       - name: Configure Environment
 
         run: |
 
-          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=click_academic" >> .env
+          echo "DB_USERNAME=root" >> .env
+          echo "DB_PASSWORD=root" >> .env
 
-          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env
+      - name: Wait for MySQL
+
+        run: |
+
+          until mysqladmin ping -h "127.0.0.1" -uroot -proot --silent
+          do
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
 
       - name: Run Migration
 
