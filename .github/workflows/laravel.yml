@@ -14,36 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     defaults:
-
       run:
-
         working-directory: backend
-
-    services:
-
-      mysql:
-
-        image: mysql:8.0
-
-        env:
-
-          MYSQL_ROOT_PASSWORD: root
-
-          MYSQL_DATABASE: click_academic
-
-        ports:
-
-          - 3306:3306
-
-        options: >-
-
-          --health-cmd="mysqladmin ping -h localhost -proot"
-
-          --health-interval=10s
-
-          --health-timeout=5s
-
-          --health-retries=5
 
     steps:
 
@@ -57,7 +29,7 @@ jobs:
 
           php-version: 8.3
 
-          extensions: mbstring,pdo_mysql
+          extensions: mbstring, pdo_sqlite
 
       - name: Copy .env
 
@@ -71,21 +43,21 @@ jobs:
 
         run: php artisan key:generate
 
-      - name: Configure Database
+      - name: Create SQLite Database
 
         run: |
 
-          echo "DB_CONNECTION=mysql" >> .env
+          mkdir -p database
 
-          echo "DB_HOST=127.0.0.1" >> .env
+          touch database/database.sqlite
 
-          echo "DB_PORT=3306" >> .env
+      - name: Configure Environment
 
-          echo "DB_DATABASE=click_academic" >> .env
+        run: |
 
-          echo "DB_USERNAME=root" >> .env
+          echo "DB_CONNECTION=sqlite" >> .env
 
-          echo "DB_PASSWORD=root" >> .env
+          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env
 
       - name: Run Migration
 
