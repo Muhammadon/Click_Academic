@@ -13,13 +13,16 @@ import Sidebar from "~/component/sidebar";
 
 import { GetApiData } from "~/core/Conections";
 import type { GetUserData } from "~/core/types";
-import StatusComponent from "~/component/infoComponents";
+import { StatusComponent } from "~/component/infoComponents";
 
 export default function User() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState<GetUserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);  useEffect(() => {
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);  
+
+
+  useEffect(() => {
     const localToken = localStorage.getItem("user_token");
 
     async function fetchUserData() {
@@ -52,12 +55,11 @@ export default function User() {
          setIsSuccess(false)
         navigate("/user/signIn");
       } finally {
-         setIsSuccess(false)
         setIsLoading(false);
       }
     }
     fetchUserData();
-  }, [navigate, userPath]);
+  }, []);
 
   // Tampilkan layar memuat kosong sejenak selagi proses verifikasi localStorage berjalan
   if (isLoading || !userData) {
@@ -116,7 +118,7 @@ export default function User() {
             </div>
 
 
-            <StatusComponent  message={userData.message} isSuccess={isSuccess} timers={2500}/> 
+            <StatusComponent  message={userData.message} isSuccess={isSuccess}/> 
           </section>
 
           <div className="grid gap-6 lg:grid-cols-2">

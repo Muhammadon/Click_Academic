@@ -82,6 +82,7 @@ export default function ClassListPage() {
           </div>
 
           {/* Search & Filter */}
+          {/*
           <div className="mt-10 grid gap-4 rounded-3xl border border-putih-bersih/10 bg-putih-bersih/10 p-5 backdrop-blur-xl lg:grid-cols-4">
             <input
               type="text"
@@ -107,6 +108,8 @@ export default function ClassListPage() {
               Cari Kelas
             </button>
           </div>
+*/}
+
         </div>
       </section>
 
