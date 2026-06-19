@@ -2,10 +2,9 @@ import { Link } from "react-router";
 import { useNavigate } from "react-router";
 import type { Route } from "../+types/home";
 import { type TypeResponseUserLogin, type TypeUserApi } from "~/core/types";
+import { StatusComponent } from "~/component/infoComponents";
 import { sendPostData, SignIn } from "~/core/Conections";
 import {
-  RiCheckboxCircleLine,
-  RiErrorWarningLine,
   RiGoogleLine,
   RiHand2,
 } from "@remixicon/react";
@@ -97,7 +96,6 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen bg-mint-lembut flex items-center justify-center px-4 py-10">
       <div className="grid w-full max-w-6xl overflow-hidden rounded-3xl shadow-2xl lg:grid-cols-2 bg-putih-bersih border border-abu-perak">
-        {/* Kolom Kiri: Informasi & Branding (Sama persis dengan SignUp) */}
         <div className="relative hidden lg:flex flex-col justify-between bg-gradient-to-br from-hijau-botol via-hijau-uin to-deep-teal p-10 text-putih-bersih overflow-hidden">
           <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-kuning-emas/20 blur-3xl" />
           <div className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-soft-ochre/10 blur-2xl" />
@@ -160,29 +158,9 @@ export default function SignInPage() {
               </p>
             </div>
 
-            {message && (
-              <div
-                className={`mb-6 flex items-start gap-3 rounded-2xl p-4 text-sm font-semibold border transition-all duration-300 animate-in fade-in slide-in-from-top-2 ${
-                  isSuccess
-                    ? "bg-emerald-50 text-hijau-botol border-emerald-200"
-                    : "bg-rose-50 text-terracotta border-rose-200"
-                }`}
-              >
-                <div className="mt-0.5 shrink-0">
-                  {isSuccess ? (
-                    <RiCheckboxCircleLine
-                      size={20}
-                      className="text-hijau-zamrud"
-                    />
-                  ) : (
-                    <RiErrorWarningLine size={20} className="text-terracotta" />
-                  )}
-                </div>
-                <div>{message}</div>
-              </div>
-            )}
+            <StatusComponent isSuccess={isSuccess}  message={message}/>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+                     <form onSubmit={handleSubmit} className="space-y-6">
               {/* Kolom Email */}
               <div>
                 <label className="mb-2 block text-sm font-semibold text-dark-slate">

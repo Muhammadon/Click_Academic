@@ -38,8 +38,13 @@ export const sidebarRouteMenu: MenuItem[] = [
       //   icon: RiCalendarCheckLine,
       // },
       {
+        title: "History Trasaksi",
+        path: "/kelas/history-transaksi",
+        icon: RiHistoryLine,
+      },
+ {
         title: "History Kelas",
-        path: "/kelas/history",
+        path: "/kelas/history-kelas",
         icon: RiHistoryLine,
       },
     ],
@@ -68,14 +73,14 @@ export const sidebarRouteMenu: MenuItem[] = [
   //   ],
   // },
 
-  {
-    title: "Payment",
-    path: "/payment",
-    icon: RiBankCardLine,
-
-    children: [{ title: "nt aja", path: "/calback", icon: RiBankCardLine }],
-  },
-
+  // {
+  //   title: "Payment",
+  //   path: "/payment",
+  //   icon: RiBankCardLine,
+  //
+  //   children: [{ title: "nt aja", path: "/calback", icon: RiBankCardLine }],
+  // },
+  //
   {
     title: "User",
     path: "/user",

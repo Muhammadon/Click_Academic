@@ -22,7 +22,7 @@ export enum CourseStatus {
   CLOSED = "Closed",
   UPCOMING = "Upcoming",
 }
-export enum ConsultationStatus {
+export enum BookingStatus {
   PAID = "paid",
   PENDING = "pending",
   FAILED = "failed",
@@ -93,16 +93,10 @@ export interface Booking {
   student_id: number;
   mentoring_id: number;
   order_id: string;
-  status: "pending" | "success" | "failed"; // Menggunakan literal type agar lebih ketat dan aman
+status: BookingStatus; // Menggunakan literal type agar lebih ketat dan aman
   snap_token: string;
   created_at?: string; // Optional, format ISO string dari Laravel timestamp
   updated_at?: string; // Optional
-}
-
-export interface BookingHistoryType{
-  status: "success" | "error";
-  message: string;
-  mentorings: Mentoring[];
 }
 
 //Interface untuk Request Body (Data yang dikirim oleh React)
@@ -119,20 +113,9 @@ export interface CreateBookingResponse {
 }
 
 export interface BookingHistoryItem {
-  id: number;
-  student_id: number;
-  mentoring_id: number;
-  order_id: string;
-  status: "pending" | "paid" | "failed"; // Menyesuaikan enum database ['pending', 'paid', 'failed']
-  snap_token: string | null;
-  created_at: string;
-  updated_at: string;
-  mentoring: Mentoring; // Nested object hasil dari Eager Loading dengan with('mentoring')
+   status: "success";
+  message: string; 
+ data : Booking[];
 }
 
-// Interface Utama bungkus Response sukses dari HTTP 200 Laravel
-export interface BookingHistoryResponse {
-  status: "success";
-  message: string;
-  data: BookingHistoryItem[];
-}
+

@@ -89,17 +89,19 @@ export default function Home() {
           </h2>
 
           <p className="mx-auto mt-8 max-w-2xl text-base leading-8 text-putih-bersih/75 sm:text-lg">
-            Platform modern untuk booking kelas pelatihan, konsultasi akademik,
-            dan pengembangan skill mahasiswa secara online.
+            Platform modern untuk booking kelas pelatihan,
+            untuk pengembangan skill mahasiswa secara online.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-5">
-            <button className="rounded-2xl border border-putih-bersih/20 bg-putih-bersih/10 px-8 py-4 text-base font-bold text-putih-bersih backdrop-blur-xl transition-all duration-300 hover:bg-putih-bersih/20">
-              Lihat Kelas
-            </button>
-            <button className="rounded-2xl bg-hijau-zamrud px-8 py-4 text-base font-bold text-putih-bersih shadow-xl shadow-hijau-zamrud/30 transition-all duration-300 hover:bg-hijau-botol">
+          <Link to={"/user"} className="rounded-2xl border border-putih-bersih/20 bg-putih-bersih/10 px-8 py-4 text-base font-bold text-putih-bersih backdrop-blur-xl transition-all duration-300 hover:bg-putih-bersih/20">
+
+          Lihat Kelas
+          </Link>
+            {/* <button className="rounded-2xl bg-hijau-zamrud px-8 py-4 text-base font-bold text-putih-bersih shadow-xl shadow-hijau-zamrud/30 transition-all duration-300 hover:bg-hijau-botol">
               Konsultasi
             </button>
+            */}
           </div>
         </div>
       </main>

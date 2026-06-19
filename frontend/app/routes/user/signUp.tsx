@@ -5,6 +5,7 @@ import {
 } from "@remixicon/react";
 import { useState } from "react";
 import { Link, useNavigate, type ErrorResponse } from "react-router";
+import { StatusComponent } from "~/component/infoComponents";
 
 import { sendPostData, SignUp } from "~/core/Conections";
 import { type TypeResponseUserApi, type TypeUserApi } from "~/core/types";
@@ -135,32 +136,10 @@ export default function SignUpPage() {
               </div>
 
               {/* TAMPILAN MESSAGE NOTIFIKASI DI SINI */}
-              {message && (
-                <div
-                  className={`mb-6 flex items-start gap-3 rounded-2xl p-4 text-sm font-semibold border transition-all duration-300 animate-in fade-in slide-in-from-top-2 ${
-                    isSuccess
-                      ? "bg-emerald-50 text-hijau-botol border-emerald-200"
-                      : "bg-rose-50 text-terracotta border-rose-200"
-                  }`}
-                >
-                  <div className="mt-0.5 shrink-0">
-                    {isSuccess ? (
-                      <RiCheckboxCircleLine
-                        size={20}
-                        className="text-hijau-zamrud"
-                      />
-                    ) : (
-                      <RiErrorWarningLine
-                        size={20}
-                        className="text-terracotta"
-                      />
-                    )}
-                  </div>
-                  <div>{message}</div>
-                </div>
-              )}
 
-              <form onSubmit={handleSendServer} className="space-y-5">
+              <StatusComponent isSuccess={isSuccess} message={message}/>
+
+                      <form onSubmit={handleSendServer} className="space-y-5">
                 {/* Kolom Username tunggal (Menghapus gabungan Nama Depan/Belakang) */}
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-dark-slate">

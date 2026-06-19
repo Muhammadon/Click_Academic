@@ -13,18 +13,16 @@ import Sidebar from "~/component/sidebar";
 
 import { GetApiData } from "~/core/Conections";
 import type { GetUserData } from "~/core/types";
+import StatusComponent from "~/component/infoComponents";
 
 export default function User() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState<GetUserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-
-  useEffect(() => {
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);  useEffect(() => {
     const localToken = localStorage.getItem("user_token");
 
     async function fetchUserData() {
-      // 1. Jika token tidak ditemukan di localStorage
       if (!localToken) {
         console.info("Token tidak ada, mengalihkan ke halaman Sign In...");
         setIsLoading(false);
@@ -43,6 +41,7 @@ export default function User() {
         });
 
         if (response.status === "success" && response) {
+         setIsSuccess(true)
           setUserData(response);
         } else {
           // Jika status response dari server error/401
@@ -50,8 +49,10 @@ export default function User() {
         }
       } catch (error) {
         console.error("Gagal mengambil data user dari server:", error);
+         setIsSuccess(false)
         navigate("/user/signIn");
       } finally {
+         setIsSuccess(false)
         setIsLoading(false);
       }
     }
@@ -113,6 +114,9 @@ export default function User() {
                 Sign Out
               </button>
             </div>
+
+
+            <StatusComponent  message={userData.message} isSuccess={isSuccess} timers={2500}/> 
           </section>
 
           <div className="grid gap-6 lg:grid-cols-2">
@@ -203,26 +207,7 @@ export default function User() {
               administrasi konsultasi online secara digital.
             </p>
           </section>
-          <h1 className="text-black">pindahin ke halaman booking anntik</h1>
-          {isLoading ? (
-            <div className="mt-4 h-24 bg-mint-lembut/30 animate-pulse rounded-2xl" />
-          ) : !userData?.data?.mentorings || userData?.data?.mentorings?.length === 0 ? (
-            // DITAMBAHKAN .data SEBELUM .mentorings
-            <div className="mt-6 text-center py-8 border border-dashed border-sage/30 rounded-2xl text-dark-slate/40 text-sm mb-12">
-              📭 Anda belum memiliki kelas yang sudah di-booking aktif.
-            </div>
-          ) : (
-            <section className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
-              {/* JALUR MAP DIGANTI MENJADI userData?.data?.mentorings */}
-              {userData?.data?.mentorings?.map((kelas) => (
-                <CardMentoring
-                  key={kelas.id}
-                  item={kelas}
-                  onViewDetail={(id) => console.log("Buka ruang kelas ID:", id)}
-                />
-              ))}
-            </section>
-          )}
+
         </main>
       </div>
     </div >

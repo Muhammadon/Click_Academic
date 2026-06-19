@@ -32,11 +32,11 @@ export default function DetailBooking() {
     setErrorText(null);
 
     try {
-      // 1. Ambil token mentah dari localStorage
+      // mbil token mentah dari localStorage
       const rawToken = localStorage.getItem("user_token");
       let token = "";
 
-      // 2. Bersihkan token dari tanda kutip hasil stringify jika ada
+      // sihkan token dari tanda kutip hasil stringify jika ada
       if (rawToken) {
         try {
           token = JSON.parse(rawToken);
@@ -125,7 +125,7 @@ export default function DetailBooking() {
     // Validasi status response dari Laravel
     if (response.status === "success") {
       
-      // 5. Panggil pop-up Midtrans Snap menggunakan snap_token dari root response
+      //Panggil pop-up Midtrans Snap menggunakan snap_token dari root response
       if ((window as any).snap) {
         (window as any).snap.pay(response.snap_token, {
           onSuccess: (result: any) => {
@@ -162,7 +162,7 @@ export default function DetailBooking() {
 };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-mint-lembut via-white to-mint-lembut/30 pb-20">
+    <div className="min-h-screen bg-linier-to-b from-mint-lembut via-white to-mint-lembut/30 pb-20">
       {/* Top Sticky Header */}
       <header className="sticky top-0 z-50 border-b border-sage/20 bg-white/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-6 py-4">
@@ -216,7 +216,6 @@ export default function DetailBooking() {
           </div>
         )}
 
-        {/* KONDISI 3: DATA BERHASIL DITAMPILKAN SECARA KETAT */}
         {!isLoading && mentoring && (
           <div className="space-y-8">
 
@@ -269,13 +268,11 @@ export default function DetailBooking() {
                 </div>
               </div>
 
-              {/* Blok Kanan: Jadwal Waktu & Tombol Aksi Akhir */}
               <div className="space-y-6">
                 <div className="rounded-[28px] border border-sage/20 bg-white p-6 shadow-md flex flex-col justify-between">
                   <div>
                     <h3 className="text-base font-black text-charcoal">Waktu Pelaksanaan</h3>
 
-                    {/* Detail Tanggal */}
                     <div className="mt-5 flex items-start gap-3.5">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mint-lembut text-hijau-botol">
                         <RiCalendarEventLine size={20} />

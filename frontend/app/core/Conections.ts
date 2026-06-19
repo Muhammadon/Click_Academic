@@ -7,6 +7,7 @@ export const SignIn = PATHSERVER + "/login";
 export const SignUp = PATHSERVER + "/register";
 export const User = PATHSERVER + "/user";
 export const Mentorings = PATHSERVER + "/mentorings";
+export const MentoringsHistory = PATHSERVER + "/history"; 
 export const BookingHistory = PATHSERVER + "/booking/history";
 
 export const BookingCreate = PATHSERVER + "/booking/create";
@@ -39,7 +40,7 @@ export async function GetApiData<Type>(
     throw error;
   }
 }
-// 1. Tentukan return type berupa Promise<TypeResponseUserApi>
+// Tentukan return type berupa Promise<TypeResponseUserApi>
 export async function sendPostData<Type>(
   url: string,
   data: any,

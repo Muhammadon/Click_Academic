@@ -3,7 +3,8 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 export default [
   index("routes/home.tsx"),
 
-  // beberpaa halaman yang di tutup adalah halaman yang belum di aktifkan
+  // beberpaa halaman yang di tutup adalah halaman yang belum di aktifkan || tidak di gunakan dulu ya 
+  // @bgdar 
 
   // login
   route("user", "./routes/user/layout.tsx", [
@@ -17,7 +18,8 @@ export default [
   route("kelas", "./routes/kelas/layout.tsx", [
     index("./routes/kelas/kelas.tsx"),
     route("daftar", "./routes/kelas/daftarKelas.tsx"),
-    route("history", "./routes/kelas/historyKelas.tsx"),
+    route("history-transaksi", "./routes/kelas/historyTransaksi.tsx"),
+    route("history-kelas", "./routes/kelas/historyKelas.tsx"),
 
     route("detail/:id", "./routes/kelas/detailBooking.tsx"),
   ]),

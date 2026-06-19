@@ -9,7 +9,6 @@ interface CardKelasProps {
 import { RiCalendarEventLine, RiTimeLine } from "@remixicon/react";
 import { useState } from "react";
 import { NavLink, redirect } from "react-router";
-import { Booking } from "~/core/Conections";
 
 // Definisikan props agar TypeScript membaca tipe data dengan benar
 interface CardKelasProps {
@@ -100,7 +99,6 @@ export const CardKelas = ({ item }: CardKelasProps) => {
             </p>
           </div>
 
-          {/* Info Waktu/Jam */}
           <div className="rounded-2xl bg-cream/40 border border-cream p-3 flex flex-col justify-center">
             <div className="flex items-center gap-1.5 text-dark-slate/60">
               <RiTimeLine size={14} className="text-terracotta" />

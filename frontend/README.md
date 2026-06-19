@@ -43,6 +43,14 @@ FrontEnd View
 user_data
 ```
 
+#### message
+ada di compoennt : `./app/component/infoComponents.tsx` 
+ - `message`  : message yang di kirim server 
+ -  `status` : yang menentukan jenis mesage warna 
+ state : 
+ - `mesage` : string 
+ - `isSucess` : boolean 
+
 ### App COlor
 
 | Rumpun Warna             | Nama Class Tailwind | Kode HEX  | Contoh Penggunaan Class                      |
