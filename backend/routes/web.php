@@ -9,3 +9,9 @@ use Illuminate\Support\Facades\Route;
 //         'version' => '1.0'
 //     ]);
 // });
+//
+//
+// ROUTE FALLBACK: Jika rute tidak terdaftar di API Laravel, serahkan ke React Router
+Route::fallback(function () {
+    return view('react');
+});

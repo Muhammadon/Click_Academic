@@ -3,7 +3,8 @@ import { RiErrorWarningFill } from "@remixicon/react";
 
 
 // 1. Tambahkan fungsi loader kosong ini di bagian atas/bawah file
-export function loader() {
+// export function loader() {
+export function clientLoader() {  // ssr
   return null;
 }
 

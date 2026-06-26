@@ -40,3 +40,6 @@ export default [
   // halamn hotfound paling bawah
   route("*", "routes/notFound.tsx"),
 ] satisfies RouteConfig;
+
+
+

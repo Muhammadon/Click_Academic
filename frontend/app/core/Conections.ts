@@ -1,7 +1,10 @@
 import type { TypeResponseUserApi, TypeUserApi } from "./types";
 
+
+
 // export const PATHSERVER: string = "http://192.168.190.44:8000/api";
-export const PATHSERVER: string = "http://127.0.0.1:8000/api";
+// export const PATHSERVER: string = "http://127.0.0.1:8000/api";
+export const PATHSERVER: string =  import.meta.env.FRONT_API|| "/api";
 
 export const SignIn = PATHSERVER + "/login";
 export const SignUp = PATHSERVER + "/register";
@@ -61,17 +64,17 @@ export async function sendPostData<Type>(
 
     // JIKA TERJADI ERROR (422, 401, 500, dll)
     if (!response.ok) {
-      try {
-        // Ambil JSON error yang kita susun di Laravel tadi
+      const contentType = response.headers.get("content-type");
+      
+      // 1. Cek apakah server benar-benar mengembalikan format JSON
+      if (contentType && contentType.includes("application/json")) {
         const errorData = await response.json();
-
-        // Lemparkan pesan teks dari Laravel agar ditangkap oleh catch di React
-        throw new Error(
-          errorData.message || `HTTP error! Status: ${response.status}`,
-        );
-      } catch (e: any) {
-        // Antisipasi jika server Laravel crash dan tidak mengembalikan JSON
-        throw new Error(e.message || `HTTP error! Status: ${response.status}`);
+        throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+      } else {
+        // 2. Jika server melempar HTML (seperti eror 405 / 500 Nginx)
+        const errorText = await response.text(); // Baca sebagai teks biasa, bukan JSON
+        console.error("HTML Error dari Server:", errorText);
+        throw new Error(`Server Error (${response.status}): Request ditolak atau rute salah.`);
       }
     }
 

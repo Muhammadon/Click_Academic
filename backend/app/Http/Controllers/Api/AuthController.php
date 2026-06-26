@@ -53,9 +53,12 @@ class AuthController extends Controller
             Log::error('Gagal Registrasi User: ' . $e->getMessage());
 
             // Kembalikan pesan yang aman dan sopan ke Client (React)
-            return response()->json([
+        return response()->json([
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan internal pada server database. Silakan hubungi admin.',
+                'debug_error_asli' => $e->getMessage(), // <-- TAMBAHKAN BARIS INI
+                'file' => $e->getFile(),               // <-- TAMBAHKAN BARIS INI
+                'line' => $e->getLine()                // <-- TAMBAHKAN BARIS INI
             ], 500);
         }
     }
