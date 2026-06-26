@@ -1,14 +1,17 @@
-name: Click Academic CI
+name: Laravel Automatic Test
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
+      - develop
 
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
+      - develop
 
 jobs:
-
   laravel-tests:
 
     runs-on: ubuntu-latest
@@ -18,86 +21,62 @@ jobs:
         working-directory: backend
 
     services:
-
       mysql:
-
         image: mysql:8.4
 
         env:
-
           MYSQL_ROOT_PASSWORD: root
-
+          MYSQL_DATABASE: click_academic_testing
           MYSQL_USER: laravel
-
-          MYSQL_DATABASE: click_academic
-
           MYSQL_PASSWORD: password123
 
         ports:
-
           - 3306:3306
 
         options: >-
-
-          --health-cmd="mysqladmin ping -h localhost -proot"
-
+          --health-cmd="mysqladmin ping -h localhost -uroot -proot"
           --health-interval=10s
-
           --health-timeout=5s
-
           --health-retries=5
 
     steps:
 
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Setup PHP
-
         uses: shivammathur/setup-php@v2
-
         with:
-
           php-version: 8.4
+          extensions: mbstring, bcmath, pdo_mysql
+          coverage: none
 
-          extensions: mbstring, pdo_mysql
-
-      - name: Copy .env
-
+      - name: Copy Environment
         run: cp .env.example .env
 
-      - name: Install Dependencies
-
+      - name: Install Composer
         run: composer install --no-interaction --prefer-dist
 
-      - name: Generate Key
-
+      - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Configure Environment
-
+      - name: Set Testing Database
         run: |
-
           echo "DB_CONNECTION=mysql" >> .env
           echo "DB_HOST=127.0.0.1" >> .env
           echo "DB_PORT=3306" >> .env
-          echo "DB_DATABASE=click_academic" >> .env
-          echo "DB_USERNAME=root" >> .env
-          echo "DB_PASSWORD=root" >> .env
+          echo "DB_DATABASE=click_academic_testing" >> .env
+          echo "DB_USERNAME=laravel" >> .env
+          echo "DB_PASSWORD=password123" >> .env
 
-      - name: Wait for MySQL
-
+      - name: Wait MySQL
         run: |
-
-          until mysqladmin ping -h "127.0.0.1" -uroot -proot --silent
-          do
-            echo "Waiting for MySQL..."
-            sleep 5
+          until mysqladmin ping -h127.0.0.1 -ularavel -ppassword123 --silent; do
+            sleep 2
           done
 
       - name: Run Migration
-
         run: php artisan migrate --force
 
-      - name: Run Tests
-
+      - name: Execute Unit & Feature Test
         run: php artisan test
