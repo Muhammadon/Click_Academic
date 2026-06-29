@@ -33,6 +33,10 @@
 - Teknologi: `Docker, GitHub`
 
 ---
+
+## Akun 
+kami mengunakan login dan juga register jadi silahkan register akun terlebih dahulu sebelum melakukan login 
+
 ## Stack Teknologi
 
 **Frontend:** `React, Vite, Tailwind CSS`
@@ -52,6 +56,10 @@
 *(Digunakan untuk version control, kolaborasi tim secara terpusat, dan penyediaan public tunneling (Ngrok) agar localhost backend dapat menerima webhook dari layanan eksternal.)*
 
 ---
+
+## Link web  
+Jika misalnya rendernya masih memuat bisa hubungi **muhammadon** atau **muhammad Nadhar** untuk merestart web nya
+<https://click-latest.onrender.com/> 
 
 ## Arsitektur Aplikasi
 

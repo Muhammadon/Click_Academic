@@ -46,7 +46,7 @@ docker run -d -p 8000:80 \
         -e APP_KEY="base64:JJ9xjaI3SJgHTK6FgEIIcrVYau20+jV7bY2QBJOYVaA=" \
         -e APP_ENV="local" \
         -e DB_CONNECTION="mysql" \
-        -e DB_HOST="localhost" \
+        -e DB_HOST="127.0.0.1" \
         -e DB_SOCKET="/run/mysqld/mysqld.sock" \
         -e DB_DATABASE="click" \
         -e DB_USERNAME="root" \
