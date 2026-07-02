@@ -15,8 +15,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // -------------------Midtrant
     Route::post("/booking/create", [BookingController::class, "create"]);
-    // nantik sesuikan ke midrant nya
-    Route::post('booking/callback', [BookingController::class, 'notificationHandler']);
     // -------------------Midtrant
 
     // Route khusus untuk mengambil daftar mentoring yang sudah di-booking oleh user
@@ -26,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/mentorings/{id}', [MentoringController::class, 'show']);
 });
 
+// nantik sesuikan ke midrant nya   
+Route::post('booking/callback', [BookingController::class, 'notificationHandler']);
 
 // Endpoint publik
 Route::get('/mentorings', [MentoringController::class, 'index']);
